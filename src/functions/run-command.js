@@ -18,7 +18,7 @@ async function impl({ command, background = false }) {
 }
 
 const spec = {
-  name: "run-shell-command",
+  name: "run-command",
   description: "Runs a shell command in a child process and returns output.",
   parameters: {
     type: "object",

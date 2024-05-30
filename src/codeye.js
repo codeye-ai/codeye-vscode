@@ -1,15 +1,8 @@
 const crc32 = require("crc-32");
-const OpenAI = require("openai").default;
 const { stdin: input, stdout: output } = require("process");
 const readline = require("readline/promises");
-
 const { load, save } = require("./features/history");
 const functions = require("./functions");
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-  organization: process.env.OPENAI_ORGANIZATION,
-});
 
 const tools = Object.values(functions).map((x) => ({
   type: "function",
@@ -21,6 +14,22 @@ async function ask(question) {
   const answer = await rl.question(question);
   rl.close();
   return answer;
+}
+
+async function client(service) {
+  if (service === "openai") {
+    const OpenAI = require("openai").default;
+    return new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+      organization: process.env.OPENAI_ORGANIZATION,
+    });
+  } else if (service === "mistralai") {
+    return import("@mistralai/mistralai").then(({ default: MistralAI }) => {
+      return new MistralAI(process.env.MISTRAL_API_KEY);
+    });
+  } else {
+    throw new Error(`Unsupported AI service: ${service}`);
+  }
 }
 
 async function generate() {
@@ -42,8 +51,9 @@ async function generate() {
     ];
   }
 
-  let initial = true;
+  const ai = await client(process.env.AI_SERVICE);
 
+  let initial = true;
   while (true) {
     if (initial) {
       messages.push({
@@ -53,15 +63,26 @@ async function generate() {
       initial = false;
     }
 
-    const completion = await openai.chat.completions.create({
-      messages,
-      model: "gpt-4o",
-      tools,
-    });
+    let completion;
+    if (process.env.AI_SERVICE === "openai") {
+      completion = await ai.chat.completions.create({
+        messages,
+        model: "gpt-4o",
+        tools,
+      });
+    } else if (process.env.AI_SERVICE === "mistralai") {
+      completion = await ai.chat({
+        messages,
+        model: "mistral-large-latest",
+        tools,
+      });
+    }
 
     const message = completion.choices[0].message;
+    messages.push(message);
+    await save(cwd, messages);
+
     if (!message.tool_calls) {
-      messages.push({ role: "assistant", content: message.content });
       console.log("AI says:", message.content);
       messages.push({ role: "user", content: await ask("Reply or ^C: ") });
 
@@ -69,7 +90,6 @@ async function generate() {
       continue;
     }
 
-    messages.push(message);
     for (const call of message.tool_calls) {
       const { name, arguments } = call.function;
 
@@ -77,12 +97,12 @@ async function generate() {
 
       const impl = functions[name]["impl"];
       const args = JSON.parse(arguments);
-      const result = await impl(args);
+      const content = await impl(args);
       messages.push({
         tool_call_id: call.id,
         role: "tool",
         name: name,
-        content: result,
+        content,
       });
 
       await save(cwd, messages);
