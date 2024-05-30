@@ -2,6 +2,8 @@ const crc32 = require("crc-32");
 const OpenAI = require("openai").default;
 const { stdin: input, stdout: output } = require("process");
 const readline = require("readline/promises");
+
+const { load, save } = require("./features/history");
 const functions = require("./functions");
 
 const openai = new OpenAI({
@@ -22,18 +24,23 @@ async function ask(question) {
 }
 
 async function generate() {
-  const messages = [
-    {
-      role: "system",
-      content: [
-        "You are code generator named Codeye, designed to write quality software.",
-        "If working on an existing project, try determining the project type by listing and reading files in current directory.",
-        "If unable to determine project type, ask the user explicitly.",
-        "Reply briefly, preferable one-line summaries only.",
-        "Current directory is: " + process.cwd(),
-      ].join(" "),
-    },
-  ];
+  const cwd = process.cwd();
+  let messages = await load(cwd);
+
+  if (!messages) {
+    messages = [
+      {
+        role: "system",
+        content: [
+          "You are a code generation tool named Codeye, designed to write quality code/software.",
+          "If working on an existing project, try determining the project type by listing and reading files in current directory.",
+          "If unable to determine project type, ask the user explicitly.",
+          "Reply briefly, preferably one line summaries only.",
+          "Current directory is: " + cwd,
+        ].join(" "),
+      },
+    ];
+  }
 
   let initial = true;
 
@@ -41,7 +48,7 @@ async function generate() {
     if (initial) {
       messages.push({
         role: "user",
-        content: await ask("Project or task: "),
+        content: "Hello",
       });
       initial = false;
     }
@@ -55,9 +62,10 @@ async function generate() {
     const message = completion.choices[0].message;
     if (!message.tool_calls) {
       messages.push({ role: "assistant", content: message.content });
-      console.log(message.content);
+      console.log("AI says:", message.content);
       messages.push({ role: "user", content: await ask("Reply or ^C: ") });
 
+      await save(cwd, messages);
       continue;
     }
 
@@ -76,6 +84,8 @@ async function generate() {
         name: name,
         content: result,
       });
+
+      await save(cwd, messages);
     }
   }
 }
