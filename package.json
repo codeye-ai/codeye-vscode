@@ -7,14 +7,13 @@
     "codeye": "index.js"
   },
   "dependencies": {
-    "@mistralai/mistralai": "^0.4.0",
     "crc-32": "^1.2.2",
     "dotenv": "^16.4.5",
     "openai": "^4.47.2",
     "yargs": "^17.7.2"
   },
-  "description": "A tool to read, fix, and write code as well as or even better than a software engineer.",
-  "license": "Proprietary",
+  "description": "CLI tool to read, fix, and write code as good as or even better than a human software engineer.",
+  "license": "none",
   "main": "index.js",
   "name": "codeye",
   "private": true,

@@ -1,90 +1,47 @@
-# Codeye
+# codeye
 
-Codeye is a code generation tool designed to write quality code/software using OpenAI's and Mistral AI's APIs. It determines the project type by listing and reading files in the current directory and assists users accordingly.
+CLI tool to read, fix, and write code as good as or even better than a human software engineer.
 
-## Prerequisites
+## Install
 
-- Node.js (as specified in `.nvmrc`)
-- Yarn (or npm)
-- OpenAI API Key (optional for Mistral AI)
-- Mistral AI API Key (optional for OpenAI)
+Clone the repository, navigate to project folder and run below commands:
 
-## Getting Started
+```shell
+# use a supported node.js version
+nvm install && nvm use
 
-1. **Clone the repository**:
+# install node.js dependencies
+yarn install
 
-   ```sh
-   git clone https://github.com/vaibhavpandeyvpz/codeye.git
-   cd codeye
-   ```
+# install "codeye" executable globally
+npm link
+```
 
-2. **Install dependencies**:
+## Usage
 
-   ```sh
-   yarn install
-   # or
-   npm install
-   ```
+Go to [platform.openai.com](https://platform.openai.com/) and create an API key. From there, make note of your organization ID as well.
 
-3. **Set up environment variables**:
+Set values for below environment in your shell using `.{bash,zsh}rc` scripts by including lines below:
 
-   Copy `.env.dist` to `.env` and replace the placeholder values with your OpenAI or Mistral AI API keys.
+```shell
+export CODEYE_OPENAI_API_KEY=__your_openai_api_key__
+export CODEYE_OPENAI_ORGANIZATION=__your_openai_organization_id__
+```
 
-   ```sh
-   cp .env.dist .env
-   nano .env
-   ```
+Then you can use the tool in any folder using below commands:
 
-   Update the file with your values:
+```shell
+# start new or restore existing session
+codeye
 
-   ```env
-   OPENAI_API_KEY=your_openai_api_key_here
-   OPENAI_ORGANIZATION=your_organization_id_here
-   MISTRAL_API_KEY=your_mistral_api_key_here
-   AI_SERVICE=openai # or mistralai
-   ```
+# start fresh session (no context/history)
+codeye --reset
+```
 
-4. **Run the tool**:
+## Development
 
-   ```sh
-   node index.js
-   ```
+Use below command to run working copy of the tool:
 
-## Project Structure
-
-- `.env`, `.env.dist`: Environment variable definitions.
-- `.gitignore`: Specifies files and directories to be ignored by git.
-- `.nvmrc`: Node version manager configuration.
-- `index.js`: Main entry point of the application. Loads environment variables and starts code generation.
-- `package.json`: Project metadata and dependencies.
-- `yarn.lock`: Yarn lockfile for package versions.
-- `src/`: Source code directory.
-  - `codeye.js`: Implements the core code generation logic.
-  - `features/history.js`: Handles loading and saving of history data.
-  - `functions/`: Directory containing various utility functions.
-
-## Features
-
-- **History Management**:
-  - `load(cwd)`: Loads history data.
-  - `save(cwd, messages)`: Saves history data.
-
-## Utility Functions
-
-- `create-directory.js`: Creates a directory and its parents if they don't exist.
-- `delete-directory.js`: Recursively deletes a directory and its contents.
-- `delete-file.js`: Deletes a file from the file system.
-- `exit-process.js`: Exits the current process.
-- `find-executable-path.js`: Finds the absolute path to an executable.
-- `get-env-var.js`: Gets the value of an environment variable.
-- `list-files-recursively.js`: Lists all files and directories recursively.
-- `list-files.js`: Lists files and directories.
-- `move-file.js`: Moves or renames a file within the file system.
-- `read-file.js`: Reads the contents of a file.
-- `run-command.js`: Runs shell commands.
-- `stop-process.js`: Stops running processes.
-- `write-file.js`: Writes text content to a file.
-
-## License
-
-This project is proprietary and all rights are reserved.
+```shell
+node .
+```

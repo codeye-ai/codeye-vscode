@@ -1,44 +1,28 @@
 const crc32 = require("crc-32");
+const OpenAI = require("openai").default;
 const { stdin: input, stdout: output } = require("process");
 const readline = require("readline/promises");
 const { load, save } = require("./features/history");
 const functions = require("./functions");
+
+const OPENAI_MODEL = "gpt-4o";
+const OPENAI_TOKEN_LIMIT = 128 * 1000; // 128K is max on gpt-4o
+
+const openai = new OpenAI({
+  apiKey: process.env.CODEYE_OPENAI_API_KEY,
+  organization: process.env.CODEYE_OPENAI_ORGANIZATION,
+});
 
 const tools = Object.values(functions).map((x) => ({
   type: "function",
   function: x.spec,
 }));
 
-const MAX_TOKENS = 8000;
-
 async function ask(question) {
   const rl = readline.createInterface({ input, output });
   const answer = await rl.question(question);
   rl.close();
   return answer;
-}
-
-async function client(service) {
-  if (service === "openai") {
-    const OpenAI = require("openai").default;
-    return new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY,
-      organization: process.env.OPENAI_ORGANIZATION,
-    });
-  } else if (service === "mistralai") {
-    return import("@mistralai/mistralai").then(({ default: MistralAI }) => {
-      return new MistralAI(process.env.MISTRAL_API_KEY);
-    });
-  } else {
-    throw new Error(`Unsupported AI service: ${service}`);
-  }
-}
-
-function tokenize(messages) {
-  return messages.reduce(
-    (acc, message) => acc + (message.content?.length || 0),
-    0,
-  );
 }
 
 async function generate(fresh = false) {
@@ -63,7 +47,6 @@ async function generate(fresh = false) {
     });
   }
 
-  const ai = await client(process.env.AI_SERVICE);
   let exited = false;
 
   for (let i = 0; ; i++) {
@@ -74,24 +57,18 @@ async function generate(fresh = false) {
       });
     }
 
-    while (tokenize(messages) > MAX_TOKENS || messages[1]?.role === "tool") {
+    while (
+      tokenize(messages) > OPENAI_TOKEN_LIMIT ||
+      messages[1]?.role === "tool"
+    ) {
       messages.splice(1, 1);
     }
 
-    let completion;
-    if (process.env.AI_SERVICE === "openai") {
-      completion = await ai.chat.completions.create({
-        messages,
-        model: "gpt-4o",
-        tools,
-      });
-    } else if (process.env.AI_SERVICE === "mistralai") {
-      completion = await ai.chat({
-        messages,
-        model: "mistral-large-latest",
-        tools,
-      });
-    }
+    const completion = await openai.chat.completions.create({
+      messages,
+      model: OPENAI_MODEL,
+      tools,
+    });
 
     const message = completion.choices[0].message;
     messages.push(message);
@@ -128,6 +105,13 @@ async function generate(fresh = false) {
       }
     }
   }
+}
+
+function tokenize(messages) {
+  return messages.reduce(
+    (acc, message) => acc + (message.content?.length || 0),
+    0,
+  );
 }
 
 module.exports = { generate };
