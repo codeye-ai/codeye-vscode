@@ -2,14 +2,20 @@ const fs = require("fs");
 const path = require("path");
 
 async function impl({ path: filepath, contents }) {
-  const directory = path.dirname(filepath);
-  if (!fs.existsSync(directory)) {
-    fs.mkdirSync(directory, { recursive: true });
+  try {
+    const directory = path.dirname(filepath);
+    if (!fs.existsSync(directory)) {
+      fs.mkdirSync(directory, { recursive: true });
+    }
+  } catch (ignore) {
+    // suppress failure
   }
 
   return fs.promises
     .writeFile(filepath, contents, { encoding: "utf-8" })
-    .then(() => "File written successfully.");
+    .then(() => true)
+    .catch(() => false)
+    .then((success) => JSON.stringify({ success }));
 }
 
 const spec = {

@@ -1,10 +1,11 @@
 async function impl() {
-  process.exit(0);
+  return "Ended tool prompt.";
 }
 
 const spec = {
   name: "exit-process",
-  description: "Exits the current process.",
+  description:
+    "Exits the current process. To be used when user is done interacting with the tool.",
   parameters: {
     type: "object",
     properties: {},

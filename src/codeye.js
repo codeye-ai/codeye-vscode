@@ -42,8 +42,6 @@ async function generate() {
         role: "system",
         content: [
           "You are a code generation tool named Codeye, designed to write quality code/software.",
-          "If working on an existing project, try determining the project type by listing and reading files in current directory.",
-          "If unable to determine project type, ask the user explicitly.",
           "Reply briefly, preferably one line summaries only.",
           "Current directory is: " + cwd,
         ].join(" "),
@@ -52,15 +50,14 @@ async function generate() {
   }
 
   const ai = await client(process.env.AI_SERVICE);
+  let exited = false;
 
-  let initial = true;
-  while (true) {
-    if (initial) {
+  for (let i = 0; ; i++) {
+    if (i === 0) {
       messages.push({
         role: "user",
         content: "Hello",
       });
-      initial = false;
     }
 
     let completion;
@@ -80,13 +77,27 @@ async function generate() {
 
     const message = completion.choices[0].message;
     messages.push(message);
-    await save(cwd, messages);
 
     if (!message.tool_calls) {
-      console.log("AI says:", message.content);
-      messages.push({ role: "user", content: await ask("Reply or ^C: ") });
+      console.log("AI says: ", message.content);
+      if (exited) {
+        await save(cwd, messages);
+        break;
+      }
 
-      await save(cwd, messages);
+      const prompt = await ask("Reply or ^C: ");
+
+      if (i === 0) {
+        messages.push({
+          role: "system",
+          content: [
+            "If working on an existing project, try determining the project type by listing and reading files in current directory.",
+            "If unable to determine project type, ask the user explicitly.",
+          ].join(" "),
+        });
+      }
+
+      messages.push({ role: "user", content: prompt });
       continue;
     }
 
@@ -105,7 +116,9 @@ async function generate() {
         content,
       });
 
-      await save(cwd, messages);
+      if (name === "exit-process") {
+        exited = true;
+      }
     }
   }
 }
