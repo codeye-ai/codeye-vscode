@@ -1,5 +1,5 @@
 async function impl() {
-  return "Ended tool prompt.";
+  return "Closed prompt and exited successfully.";
 }
 
 const spec = {

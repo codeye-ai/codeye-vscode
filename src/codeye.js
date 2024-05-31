@@ -41,23 +41,26 @@ function tokenize(messages) {
   );
 }
 
-async function generate() {
+async function generate(fresh = false) {
   const cwd = process.cwd();
-  let messages = await load(cwd);
+  const messages = [];
+  if (!fresh) {
+    const history = await load(cwd);
+    messages.push(...history);
+  }
 
-  if (!messages) {
-    messages = [
-      {
-        role: "system",
-        content: [
-          "You are a code generation tool named Codeye, designed to write quality code/software.",
-          "Reply briefly, preferably one line summaries only.",
-          "Current directory is: " + cwd,
-          "If working on an existing project, try determining the project type by listing and reading files in current directory.",
-          "If unable to determine project type, ask the user explicitly.",
-        ].join(" "),
-      },
-    ];
+  if (!messages?.length) {
+    messages.push({
+      role: "system",
+      content: [
+        "You are a code generation tool named Codeye, designed to write quality code/software.",
+        "If working on an existing project, try determining the project type by listing and reading files in current directory.",
+        "If unable to determine project type, ask the user explicitly.",
+        "Reply briefly, preferably one line summaries only.",
+        "Prefer to write/update code directly into files and skip sending big chunks of code as replies.",
+        "Current directory is: " + cwd,
+      ].join(" "),
+    });
   }
 
   const ai = await client(process.env.AI_SERVICE);
