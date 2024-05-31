@@ -35,7 +35,10 @@ async function client(service) {
 }
 
 function tokenize(messages) {
-  return messages.reduce((acc, message) => acc + message.content.length, 0);
+  return messages.reduce(
+    (acc, message) => acc + (message.content?.length || 0),
+    0,
+  );
 }
 
 async function generate() {
