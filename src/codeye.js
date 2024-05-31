@@ -30,7 +30,9 @@ async function generate(fresh = false) {
   const messages = [];
   if (!fresh) {
     const history = await load(cwd);
-    messages.push(...history);
+    if (history) {
+      messages.push(...history);
+    }
   }
 
   if (!messages?.length) {
