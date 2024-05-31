@@ -1,4 +1,5 @@
 const fs = require("fs/promises");
+const path = require("path");
 
 async function impl({ oldPath, newPath }) {
   return fs
