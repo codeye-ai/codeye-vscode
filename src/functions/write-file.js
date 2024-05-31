@@ -4,7 +4,7 @@ const path = require("path");
 async function impl({ path: filepath, contents }) {
   return fs
     .mkdir(path.dirname(filepath), { recursive: true })
-    .writeFile(filepath, contents, { encoding: "utf-8" })
+    .then(() => fs.writeFile(filepath, contents, { encoding: "utf-8" }))
     .then(() => true)
     .catch(() => false)
     .then((success) => JSON.stringify({ success }));

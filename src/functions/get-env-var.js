@@ -1,5 +1,5 @@
 async function impl({ name }) {
-  const value = process.env[name] || '';
+  const value = process.env[name] || "";
   return JSON.stringify({ value });
 }
 
