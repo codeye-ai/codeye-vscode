@@ -1,4 +1,8 @@
 {
+  "author": {
+    "name": "Vaibhav Pandey",
+    "email": "contact@vaibhavpandey.com"
+  },
   "bin": {
     "codeye": "index.js"
   },
@@ -8,7 +12,10 @@
     "dotenv": "^16.4.5",
     "openai": "^4.47.2"
   },
+  "description": "A tool to read, fix, and write code as well as or even better than a software engineer.",
+  "license": "Proprietary",
   "main": "index.js",
   "name": "codeye",
-  "private": true
+  "private": true,
+  "version": "1.0.0"
 }

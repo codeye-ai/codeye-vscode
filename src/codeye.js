@@ -9,6 +9,8 @@ const tools = Object.values(functions).map((x) => ({
   function: x.spec,
 }));
 
+const MAX_TOKENS = 8000;
+
 async function ask(question) {
   const rl = readline.createInterface({ input, output });
   const answer = await rl.question(question);
@@ -30,6 +32,10 @@ async function client(service) {
   } else {
     throw new Error(`Unsupported AI service: ${service}`);
   }
+}
+
+function tokenize(messages) {
+  return messages.reduce((acc, message) => acc + message.content.length, 0);
 }
 
 async function generate() {
@@ -58,6 +64,10 @@ async function generate() {
         role: "user",
         content: "Hello",
       });
+    }
+
+    while (tokenize(messages) > MAX_TOKENS) {
+      messages.splice(1, 1);
     }
 
     let completion;
