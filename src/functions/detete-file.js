@@ -1,13 +1,21 @@
 const fs = require("fs");
+const path = require("path");
 
-async function impl({ path }) {
-  if (!fs.existsSync(path)) {
-    return `File ${path} does not exist.`;
+async function impl({ path: file }) {
+  if (!fs.existsSync(file)) {
+    return `File ${file} does not exist.`;
   }
 
-  fs.unlinkSync(path);
+  const cwd = process.cwd();
+  const absolute = path.resolve(file);
 
-  return `File ${path} deleted successfully.`;
+  if (!absolute.startsWith(cwd)) {
+    return `File ${file} is outside the current working directory.`;
+  }
+
+  fs.unlinkSync(file);
+
+  return `File ${file} deleted successfully.`;
 }
 
 const spec = {

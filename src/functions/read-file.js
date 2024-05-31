@@ -15,7 +15,7 @@ const spec = {
       path: {
         type: "string",
         description:
-          "Path to file. It can either be absolute of relative to current directory.",
+          "Path to file. It can either be absolute or relative to current directory.",
       },
     },
     required: ["path"],

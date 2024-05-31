@@ -22,7 +22,7 @@ const spec = {
       path: {
         type: "string",
         description:
-          "Path to a directory in which to list files. It can either be absolute of relative to current directory.",
+          "Path to a directory in which to list files and directories. It can either be absolute of relative to current directory.",
       },
     },
     required: ["path"],

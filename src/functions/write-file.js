@@ -21,7 +21,7 @@ async function impl({ path: filepath, contents }) {
 const spec = {
   name: "write-file",
   description:
-    "Write text contents into file. It also creates missing parent folders automatically, if needed.",
+    "Write text contents into file. It also creates missing parent directories automatically, if needed.",
   parameters: {
     type: "object",
     properties: {
