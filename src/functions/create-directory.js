@@ -1,10 +1,11 @@
-const fs = require("fs");
+const fs = require("fs/promises");
 
 async function impl({ path }) {
-  return fs.promises
+  return fs
     .mkdir(path, { recursive: true })
-    .then(() => JSON.stringify({ success: true }))
-    .catch((error) => JSON.stringify({ success: false, error: error.message }));
+    .then(() => true)
+    .catch(() => false)
+    .then((success) => JSON.stringify({ success }));
 }
 
 const spec = {

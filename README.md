@@ -79,6 +79,7 @@ Codeye is a code generation tool designed to write quality code/software using O
 - `get-env-var.js`: Gets the value of an environment variable.
 - `list-files-recursively.js`: Lists all files and directories recursively.
 - `list-files.js`: Lists files and directories.
+- `move-file.js`: Moves or renames a file within the file system.
 - `read-file.js`: Reads the contents of a file.
 - `run-command.js`: Runs shell commands.
 - `stop-process.js`: Stops running processes.

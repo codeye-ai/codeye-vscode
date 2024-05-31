@@ -53,6 +53,8 @@ async function generate() {
           "You are a code generation tool named Codeye, designed to write quality code/software.",
           "Reply briefly, preferably one line summaries only.",
           "Current directory is: " + cwd,
+          "If working on an existing project, try determining the project type by listing and reading files in current directory.",
+          "If unable to determine project type, ask the user explicitly.",
         ].join(" "),
       },
     ];
@@ -69,7 +71,7 @@ async function generate() {
       });
     }
 
-    while (tokenize(messages) > MAX_TOKENS) {
+    while (tokenize(messages) > MAX_TOKENS || messages[1]?.role === "tool") {
       messages.splice(1, 1);
     }
 
@@ -92,24 +94,13 @@ async function generate() {
     messages.push(message);
 
     if (!message.tool_calls) {
-      console.log("AI says: ", message.content);
+      console.log("AI says:", message.content);
       if (exited) {
         await save(cwd, messages);
         break;
       }
 
       const prompt = await ask("Reply or ^C: ");
-
-      if (i === 0) {
-        messages.push({
-          role: "system",
-          content: [
-            "If working on an existing project, try determining the project type by listing and reading files in current directory.",
-            "If unable to determine project type, ask the user explicitly.",
-          ].join(" "),
-        });
-      }
-
       messages.push({ role: "user", content: prompt });
       continue;
     }

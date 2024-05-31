@@ -1,17 +1,9 @@
-const fs = require("fs");
+const fs = require("fs/promises");
 const path = require("path");
 
 async function impl({ path: filepath, contents }) {
-  try {
-    const directory = path.dirname(filepath);
-    if (!fs.existsSync(directory)) {
-      fs.mkdirSync(directory, { recursive: true });
-    }
-  } catch (ignore) {
-    // suppress failure
-  }
-
-  return fs.promises
+  return fs
+    .mkdir(path.dirname(filepath), { recursive: true })
     .writeFile(filepath, contents, { encoding: "utf-8" })
     .then(() => true)
     .catch(() => false)

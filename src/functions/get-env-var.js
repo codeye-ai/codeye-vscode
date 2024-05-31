@@ -1,6 +1,6 @@
 async function impl({ name }) {
-  const value = process.env[name] || null;
-  return JSON.stringify({ success: true, value });
+  const value = process.env[name] || '';
+  return JSON.stringify({ value });
 }
 
 const spec = {
