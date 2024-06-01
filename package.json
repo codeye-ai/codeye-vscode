@@ -46,6 +46,15 @@
           "type": [
             "string"
           ],
+          "enum": ["gpt-4o", "gpt-3.5-turbo"],
+          "enumDescriptions": [
+            "Use the (latest) GPT-4o model and works well with projects of all sizes.",
+            "Use the GPT-3.5 Turbo model which is cheaper but only suitable from small projects."
+          ],
+          "enumItemLabels": [
+            "GPT-4o",
+            "GPT-3.5 Turbo"
+          ],
           "default": "gpt-4o",
           "description": "Model to use for code generation. Could be one of gpt-4o or gpt-3.5-turbo for now."
         }
