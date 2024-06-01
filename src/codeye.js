@@ -4,30 +4,14 @@ const repl = require("repl");
 const { load, save } = require("./features/history");
 const functions = require("./functions");
 
-let openAiApiKey;
-let openAiOrganization;
-let openAiModel;
-
-try {
-  const vscode = require("vscode");
-  const codeye = vscode.workspace.getConfiguration("codeye.setting");
-
-  openAiApiKey = codeye.get("openAiApiKey");
-  openAiOrganization = codeye.get("openAiOrganization");
-  openAiModel = codeye.get("openAiModel");
-} catch (e) {
-  openAiApiKey = process.env.CODEYE_OPENAI_API_KEY;
-  openAiOrganization = process.env.CODEYE_OPENAI_ORGANIZATION;
-  openAiModel = process.env.CODEYE_OPENAI_MODEL || "gpt-4o";
-}
-
-const OPENAI_TOKEN_LIMIT = (openAiModel === "gpt-4o" ? 128 : 16) * 1000; // 128K is max on gpt-4o, 16K on gpt-3.5-turbo
+const OPENAI_MODEL = process.env.CODEYE_OPENAI_MODEL || "gpt-4o";
+const OPENAI_TOKEN_LIMIT = (OPENAI_MODEL === "gpt-4o" ? 128 : 16) * 1000; // 128K is max on gpt-4o, 16K on gpt-3.5-turbo
 
 const cwd = process.cwd();
 
 const openai = new OpenAI({
-  apiKey: openAiApiKey,
-  organization: openAiOrganization,
+  apiKey: process.env.CODEYE_OPENAI_API_KEY,
+  organization: process.env.CODEYE_OPENAI_ORGANIZATION,
 });
 
 const tools = Object.values(functions).map((x) => ({
@@ -48,7 +32,7 @@ async function respond(messages, content, a, b, callback) {
 
     const completion = await openai.chat.completions.create({
       messages,
-      model: openAiModel,
+      model: OPENAI_MODEL,
       tools,
     });
 
