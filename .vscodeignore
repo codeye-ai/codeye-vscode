@@ -1,0 +1,10 @@
+.vscode/**
+.vscode-test/**
+test/**
+.gitignore
+.yarnrc
+README-internal.md
+**/jsconfig.json
+**/*.map
+**/.eslintrc.json
+**/.vscode-test.*

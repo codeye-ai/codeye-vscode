@@ -1,10 +1,75 @@
 {
-  "author": {
-    "name": "Vaibhav Pandey",
-    "email": "contact@vaibhavpandey.com"
+  "name": "codeye",
+  "displayName": "Codeye",
+  "description": "CLI tool to read, fix, and write code as good as or even better than a human software engineer.",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.89.0"
   },
-  "bin": {
-    "codeye": "index.js"
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "codeye.startSession",
+        "title": "Codeye: Start session"
+      },
+      {
+        "command": "codeye.startSessionAfresh",
+        "title": "Codeye: Start fresh session"
+      }
+    ],
+    "configuration": {
+      "title": "Codeye",
+      "properties": {
+        "codeye.openAiApiKey": {
+          "type": "string",
+          "description": "Your OpenAI API key."
+        },
+        "codeye.openAiOrganization": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null,
+          "description": "Your OpenAI organization ID (if any)."
+        },
+        "codeye.openAiModel": {
+          "type": [
+            "string"
+          ],
+          "default": "gpt-4o",
+          "description": "Model to use for code generation. Could be one of gpt-4o or gpt-3.5-turbo for now."
+        }
+      }
+    },
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "codeye.startSession"
+        },
+        {
+          "command": "codeye.startSessionAfresh"
+        }
+      ]
+    },
+    "terminal": {
+      "profiles": [
+        {
+          "id": "codeye.terminal-profile",
+          "icon": "terminal",
+          "title": "Codeye"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "pretest": "yarn run lint",
+    "test": "vscode-test"
   },
   "dependencies": {
     "crc-32": "^1.2.2",
@@ -12,10 +77,13 @@
     "openai": "^4.47.2",
     "yargs": "^17.7.2"
   },
-  "description": "CLI tool to read, fix, and write code as good as or even better than a human software engineer.",
-  "license": "none",
-  "main": "index.js",
-  "name": "codeye",
-  "private": true,
-  "version": "1.0.0"
+  "devDependencies": {
+    "@types/vscode": "^1.89.0",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "18.x",
+    "eslint": "^8.57.0",
+    "typescript": "^5.4.5",
+    "@vscode/test-cli": "^0.0.9",
+    "@vscode/test-electron": "^2.4.0"
+  }
 }

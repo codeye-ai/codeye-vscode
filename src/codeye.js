@@ -1,7 +1,5 @@
-const crc32 = require("crc-32");
 const OpenAI = require("openai").default;
 const repl = require("repl");
-const util = require("util");
 
 const { load, save } = require("./features/history");
 const functions = require("./functions");
@@ -91,6 +89,7 @@ async function generate(fresh = false) {
         "Reply briefly, preferably one line summaries only.",
         "Prefer to write/update code directly into files and skip sending big chunks of code as replies.",
         "Current directory is: " + cwd,
+        "To end the tool session, users must type .exit and hit Enter.",
       ].join(" "),
     });
   }
