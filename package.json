@@ -7,8 +7,12 @@
     "vscode": "^1.89.0"
   },
   "categories": [
-    "Other"
+    "AI",
+    "Chat",
+    "Machine Learning",
+    "Snippets"
   ],
+  "publisher": "codeye",
   "activationEvents": [],
   "main": "./extension.js",
   "contributes": {
