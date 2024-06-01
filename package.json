@@ -59,7 +59,7 @@
     "terminal": {
       "profiles": [
         {
-          "id": "codeye.terminal-profile",
+          "id": "codeye.terminalProfile",
           "icon": "terminal",
           "title": "Codeye"
         }

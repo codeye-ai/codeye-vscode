@@ -25,3 +25,17 @@ Use below command to run working copy of the tool:
 ```shell
 node cli.js
 ```
+
+## Publishing
+
+Before publishing, make sure to install the `vsce` CLI, if not already:
+
+```shell
+npm install -g @vscode/vsce
+```
+
+Then package your extension as `vsix` file.
+
+```shell
+vsce package
+```
