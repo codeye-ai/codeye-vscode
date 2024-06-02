@@ -46,7 +46,10 @@
           "type": [
             "string"
           ],
-          "enum": ["gpt-4o", "gpt-3.5-turbo"],
+          "enum": [
+            "gpt-4o",
+            "gpt-3.5-turbo"
+          ],
           "enumDescriptions": [
             "Use the (latest) GPT-4o model and works well with projects of all sizes.",
             "Use the GPT-3.5 Turbo model which is cheaper but only suitable from small projects."
