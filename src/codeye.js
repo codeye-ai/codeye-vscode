@@ -51,6 +51,13 @@ async function respond(messages, content, a, b, callback) {
       const impl = functions[name]["impl"];
       const args = JSON.parse(arguments);
 
+      console.log(
+        `Running tool: ${name}`,
+        JSON.stringify(
+          !!args.contents ? { ...args, contents: "<redacted>" } : args,
+        ),
+      );
+
       const content = await impl(args);
 
       messages.push({
