@@ -1,4 +1,5 @@
 const OpenAI = require("openai").default;
+const os = require("os");
 const repl = require("repl");
 
 const { load, save } = require("./features/history");
@@ -87,6 +88,25 @@ async function generate(fresh = false) {
   }
 
   if (!messages?.length) {
+    let system;
+    if (os.platform() === "linux") {
+      system = await new Promise((resolve, reject) => {
+        getos(function(e, os) {
+          if (e) {
+            reject(e);
+          }
+
+          resolve({ arch: process.arch, ...os });
+        });
+      });
+    } else {
+      system = {
+        platform: os.platform(),
+        release: os.release(),
+        arch: process.arch,
+      };
+    }
+
     messages.push({
       role: "system",
       content: [
@@ -95,6 +115,7 @@ async function generate(fresh = false) {
         "Reply briefly, preferably one line summaries only.",
         "Prefer to write/update code directly into files and skip sending big chunks of code as replies.",
         "Current directory is: " + cwd,
+        "Platform / operatin system is: " + JSON.stringify(os),
         "If working on an existing project, try determining the project type by listing and reading files in current directory.",
         "If unable to determine project type, ask the user explicitly.",
       ].join(" "),
