@@ -131,3 +131,6 @@ dist
 
 # VS code extension package(s)
 *.vsix
+
+# esbuild output
+/*.build.js

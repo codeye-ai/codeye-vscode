@@ -1,7 +1,7 @@
 const path = require("path");
 const vscode = require("vscode");
 
-const script = path.join(__dirname, "cli.js");
+const script = path.join(__dirname, "cli.build.js");
 
 /**
  * @param {vscode.ExtensionContext} context

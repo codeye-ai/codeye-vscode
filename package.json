@@ -3,7 +3,7 @@
   "displayName": "Codeye",
   "description": "CLI tool to read, fix, and write code as good as or even better than a human software engineer.",
   "icon": "icon.png",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "engines": {
     "vscode": "^1.80.0"
   },
@@ -15,9 +15,9 @@
   ],
   "publisher": "codeye",
   "activationEvents": [],
-  "main": "./extension.js",
+  "main": "extension.build.js",
   "bin": {
-    "codeye": "cli.js"
+    "codeye": "cli.build.js"
   },
   "contributes": {
     "commands": [
@@ -87,9 +87,12 @@
     }
   },
   "scripts": {
+    "esbuild-cli": "esbuild ./cli.js --bundle --outfile=cli.build.js --format=cjs --platform=node",
+    "esbuild-extension": "esbuild ./extension.js --bundle --outfile=extension.build.js --external:vscode --format=cjs --platform=node",
     "lint": "eslint .",
     "pretest": "yarn run lint",
-    "test": "vscode-test"
+    "test": "vscode-test",
+    "vscode:prepublish": "npm run esbuild-cli -- --minify && npm run esbuild-extension -- --minify"
   },
   "dependencies": {
     "chalk": "4.1.2",
@@ -106,6 +109,7 @@
     "@types/vscode": "^1.80.0",
     "@vscode/test-cli": "^0.0.9",
     "@vscode/test-electron": "^2.4.0",
+    "esbuild": "^0.21.4",
     "eslint": "^8.57.0",
     "typescript": "^5.4.5"
   }
