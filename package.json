@@ -16,6 +16,9 @@
   "publisher": "codeye",
   "activationEvents": [],
   "main": "./extension.js",
+  "bin": {
+    "codeye": "cli.js"
+  },
   "contributes": {
     "commands": [
       {
