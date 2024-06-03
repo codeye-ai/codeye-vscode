@@ -20,7 +20,7 @@ const tools = Object.values(functions).map((x) => ({
   function: x.spec,
 }));
 
-async function respond(messages, content, a, b, callback) {
+async function respond(messages, content, a, b, callback, verbose = false) {
   messages.push({ role: "user", content });
 
   while (true) {
@@ -52,12 +52,14 @@ async function respond(messages, content, a, b, callback) {
       const impl = functions[name]["impl"];
       const args = JSON.parse(arguments);
 
-      console.log(
-        `Running tool: ${name}`,
-        JSON.stringify(
-          !!args.contents ? { ...args, contents: "<redacted>" } : args,
-        ),
-      );
+      if (verbose) {
+        console.log(
+          `Running tool: ${name}`,
+          JSON.stringify(
+            !!args.contents ? { ...args, contents: "<redacted>" } : args,
+          ),
+        );
+      }
 
       const content = await impl(args);
 
@@ -78,7 +80,7 @@ function tokenize(messages) {
   );
 }
 
-async function generate(fresh = false) {
+async function generate(fresh = false, verbose = false) {
   const messages = [];
   if (!fresh) {
     const history = await load(cwd);
@@ -91,9 +93,10 @@ async function generate(fresh = false) {
     let system;
     if (os.platform() === "linux") {
       system = await new Promise((resolve, reject) => {
-        getos(function(e, os) {
+        getos(function (e, os) {
           if (e) {
             reject(e);
+            return;
           }
 
           resolve({ arch: process.arch, ...os });
@@ -124,7 +127,7 @@ async function generate(fresh = false) {
 
   repl.start({
     prompt: "codeye % ",
-    eval: (a, b, c, d) => respond(messages, a, b, c, d),
+    eval: (a, b, c, d) => respond(messages, a, b, c, d, verbose),
     useColors: false,
     writer: (output) => output,
   });

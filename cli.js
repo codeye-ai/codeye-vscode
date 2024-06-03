@@ -11,8 +11,13 @@ const argv = yargs(hideBin(process.argv))
     type: "boolean",
     description: "Resets the conversation history.",
   })
+  .option("verbose", {
+    alias: "v",
+    type: "boolean",
+    description: "Enables verbose output.",
+  })
   .parse();
 
 const { generate } = require("./src/codeye");
 
-generate(!!argv.reset);
+generate(!!argv.reset, !!argv.verbose);
