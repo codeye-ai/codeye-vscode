@@ -1,6 +1,8 @@
+const chalk = require("chalk");
 const OpenAI = require("openai").default;
 const os = require("os");
 const repl = require("repl");
+const { processes } = require("./functions/run-command");
 
 const { load, save } = require("./features/history");
 const functions = require("./functions");
@@ -141,11 +143,17 @@ async function generate(fresh = false, verbose = false) {
     });
   }
 
-  repl.start({
-    prompt: "codeye % ",
-    eval: (a, b, c, d) => respond(messages, a, b, c, d, verbose),
-    useColors: false,
-    writer: (output) => output,
+  const prompt = "you → ";
+  const r = repl.start({
+    prompt: chalk.green(prompt),
+    eval: (a, b, c, d) => respond(messages, a?.trim(), b, c, d, verbose),
+    useColors: true,
+    writer: (output) => chalk.blue("codeye → ") + output + "\n",
+  });
+  r.setPrompt(chalk.green(prompt), prompt.length);
+  r.on("exit", () => {
+    Object.values(processes).forEach((process) => process.kill("SIGTERM"));
+    process.exit();
   });
 }
 

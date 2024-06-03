@@ -89,6 +89,7 @@
     "test": "vscode-test"
   },
   "dependencies": {
+    "chalk": "4.1.2",
     "crc-32": "^1.2.2",
     "dotenv": "^16.4.5",
     "getos": "^3.2.1",
