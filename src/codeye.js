@@ -20,8 +20,8 @@ const tools = Object.values(functions).map((x) => ({
   function: x.spec,
 }));
 
-async function respond(messages, content, a, b, callback, verbose = false) {
-  messages.push({ role: "user", content });
+async function respond(messages, text, a, b, callback, verbose = false) {
+  messages.push({ role: "user", content: [{ type: "text", text }] });
 
   while (true) {
     while (
@@ -61,14 +61,29 @@ async function respond(messages, content, a, b, callback, verbose = false) {
         );
       }
 
-      const content = await impl(args);
+      const response = await impl(args);
+
+      let content;
+      if (typeof response === "string") {
+        content = [{ type: "text", text: response }];
+      } else {
+        content = response;
+      }
 
       messages.push({
         tool_call_id: call.id,
         role: "tool",
         name: name,
-        content,
+        content: content.filter((x) => x.type === "text"),
       });
+
+      const images = content.filter((x) => x.type === "image_url");
+      if (images.length) {
+        messages.push({
+          role: "user",
+          content: images,
+        });
+      }
     }
   }
 }
@@ -114,11 +129,12 @@ async function generate(fresh = false, verbose = false) {
       role: "system",
       content: [
         "You are a code generation tool named Codeye, designed to write quality code/software.",
+        "You can read and process any kind of text or image files for understanding the task.",
         "To close, end or exit the tool session, users must explicitly type '.exit' and hit Enter.",
         "Reply briefly, preferably one line summaries only.",
-        "Prefer to write/update code directly into files and skip sending big chunks of code as replies.",
-        "Current directory is: " + cwd,
-        "Platform / operatin system is: " + JSON.stringify(os),
+        "Always write generated code directly into files and skip sending big chunks of code as chat replies.",
+        "Platform / operatin system is: '" + JSON.stringify(os) + "'.",
+        "Current directory is: '" + cwd + "'.",
         "If working on an existing project, try determining the project type by listing and reading files in current directory.",
         "If unable to determine project type, ask the user explicitly.",
       ].join(" "),
