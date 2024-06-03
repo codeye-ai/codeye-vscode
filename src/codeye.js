@@ -56,7 +56,7 @@ async function respond(messages, text, a, b, callback, verbose = false) {
 
       if (verbose) {
         console.log(
-          `Running tool: ${name}`,
+          chalk.yellow(`tool → ${name}`),
           JSON.stringify(
             !!args.contents ? { ...args, contents: "<redacted>" } : args,
           ),

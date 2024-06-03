@@ -1,8 +1,8 @@
 const createDirectory = require("./create-directory");
 const deleteDirectory = require("./delete-directory");
 const deleteFile = require("./delete-file");
-const findExecutablePath = require("./find-executable-path");
 const fileInfo = require("./file-info");
+const findExecutablePath = require("./find-executable-path");
 const getEnvVar = require("./get-env-var");
 const listFiles = require("./list-files");
 const listFilesRecursively = require("./list-files-recursively");
@@ -16,8 +16,8 @@ module.exports = {
   [createDirectory.spec.name]: createDirectory,
   [deleteDirectory.spec.name]: deleteDirectory,
   [deleteFile.spec.name]: deleteFile,
-  [findExecutablePath.spec.name]: findExecutablePath,
   [fileInfo.spec.name]: fileInfo,
+  [findExecutablePath.spec.name]: findExecutablePath,
   [getEnvVar.spec.name]: getEnvVar,
   [listFiles.spec.name]: listFiles,
   [listFilesRecursively.spec.name]: listFilesRecursively,
