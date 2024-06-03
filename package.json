@@ -3,7 +3,7 @@
   "displayName": "Codeye",
   "description": "CLI tool to read, fix, and write code as good as or even better than a human software engineer.",
   "icon": "icon.png",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "engines": {
     "vscode": "^1.80.0"
   },
