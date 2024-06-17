@@ -3,7 +3,7 @@
   "displayName": "Codeye",
   "description": "Visual Studio Code extension and CLI tool to read, fix, and write code as good as or even better than a human software engineer.",
   "icon": "icon.png",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "engines": {
     "vscode": "^1.80.0"
   },
