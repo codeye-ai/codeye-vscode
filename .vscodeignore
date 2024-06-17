@@ -1,3 +1,4 @@
+.github/
 .vscode/**
 .vscode-test/**
 images/
@@ -7,6 +8,7 @@ test/**
 .eslintrc.json
 .gitignore
 .nvmrc
+.prettierignore
 .vscode-test.mjs
 .yarnrc
 cli.js
