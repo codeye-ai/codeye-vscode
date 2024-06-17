@@ -135,7 +135,7 @@ async function generate(fresh = false, verbose = false) {
         "To close, end or exit the tool session, users must explicitly type '.exit' and hit Enter.",
         "Reply briefly, preferably one line summaries only.",
         "Always write generated code directly into files and skip sending big chunks of code as chat replies.",
-        "Platform / operatin system is: '" + JSON.stringify(system) + "'.",
+        "Platform / operating system is: '" + JSON.stringify(system) + "'.",
         "Current directory is: '" + cwd + "'.",
         "If working on an existing project, try determining the project type by listing and reading files in current directory.",
         "If unable to determine project type, ask the user explicitly.",
