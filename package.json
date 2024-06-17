@@ -33,6 +33,10 @@
     "configuration": {
       "title": "Codeye",
       "properties": {
+        "codeye.geminiApiKey": {
+          "type": "string",
+          "description": "Your Google Gemini or AI Studio API key."
+        },
         "codeye.openAiApiKey": {
           "type": "string",
           "description": "Your OpenAI API key."
@@ -45,24 +49,30 @@
           "default": null,
           "description": "Your OpenAI organization ID (if any)."
         },
-        "codeye.openAiModel": {
+        "codeye.aiModel": {
           "type": [
             "string"
           ],
           "enum": [
+            "gemini-1.5-flash-latest",
+            "gemini-1.5-pro-latest",
             "gpt-4o",
             "gpt-3.5-turbo"
           ],
           "enumDescriptions": [
-            "Use the (latest) GPT-4o model and works well with projects of all sizes.",
+            "Designed for high-volume, high-frequency tasks where cost and latency matter.",
+            "Designed for larger context and robust multimodal i.e., text, image etc. as input.",
+            "Use the (latest) GPT-4o model and works well with projects of all sizes with text and image files.",
             "Use the GPT-3.5 Turbo model which is cheaper but only suitable from small projects."
           ],
           "enumItemLabels": [
+            "Gemini 1.5 Flash",
+            "Gemini 1.5 Pro",
             "GPT-4o",
             "GPT-3.5 Turbo"
           ],
           "default": "gpt-4o",
-          "description": "Model to use for code generation. Could be one of gpt-4o or gpt-3.5-turbo for now."
+          "description": "Model to use for code generation. Could be one of a Google Gemini or OpenAI ChatGPT model identifier."
         }
       }
     },
@@ -96,6 +106,7 @@
     "vscode:prepublish": "npm run esbuild-cli -- --minify && npm run esbuild-extension -- --minify"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.12.0",
     "chalk": "4.1.2",
     "crc-32": "^1.2.2",
     "dotenv": "^16.4.5",

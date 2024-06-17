@@ -15,7 +15,7 @@ async function impl({ name }) {
 }
 
 const spec = {
-  name: "find-executable-path",
+  name: "find_executable_path",
   description:
     "Finds the absolute path to an executable using the 'which' or 'where' command depending on the OS.",
   parameters: {

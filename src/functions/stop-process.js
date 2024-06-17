@@ -12,7 +12,7 @@ async function impl({ pid }) {
 }
 
 const spec = {
-  name: "stop-process",
+  name: "stop_process",
   description: "Stops a running process using the given process ID.",
   parameters: {
     type: "object",

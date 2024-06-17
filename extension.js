@@ -23,7 +23,7 @@ function activate(context) {
 
   context.subscriptions.push(
     vscode.window.registerTerminalProfileProvider("codeye.terminalProfile", {
-      provideTerminalProfile(token) {
+      provideTerminalProfile() {
         return {
           options: create(),
         };
@@ -38,9 +38,10 @@ function create(args = []) {
   return {
     env: {
       ...process.env,
+      CODEYE_GEMINI_API_KEY: codeye.get("geminiApiKey"),
       CODEYE_OPENAI_API_KEY: codeye.get("openAiApiKey"),
       CODEYE_OPENAI_ORGANIZATION: codeye.get("openAiOrganization"),
-      CODEYE_OPENAI_MODEL: codeye.get("openAiModel"),
+      CODEYE_AI_MODEL: codeye.get("aiModel"),
     },
     name: "Codeye",
     shellPath: "node",

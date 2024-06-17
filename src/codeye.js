@@ -1,43 +1,45 @@
 const chalk = require("chalk");
-const OpenAI = require("openai").default;
 const os = require("os");
 const repl = require("repl");
 const { processes } = require("./functions/run-command");
+const Gemini = require("./models/gemini");
+const OpenAI = require("./models/openai");
 
 const { load, save } = require("./features/history");
 const functions = require("./functions");
 
-const OPENAI_MODEL = process.env.CODEYE_OPENAI_MODEL || "gpt-4o";
-const OPENAI_TOKEN_LIMIT = (OPENAI_MODEL === "gpt-4o" ? 128 : 16) * 1000; // 128K is max on gpt-4o, 16K on gpt-3.5-turbo
+const MODEL =
+  process.env.CODEYE_AI_MODEL ||
+  process.env.CODEYE_OPENAI_MODEL ||
+  "gemini-1.5-flash-latest";
+const MODEL_TOKEN_LIMIT = (MODEL === "gpt-3.5-turbo" ? 50 : 15) * 1000;
 
 const cwd = process.cwd();
 
-const openai = new OpenAI({
-  apiKey: process.env.CODEYE_OPENAI_API_KEY,
-  organization: process.env.CODEYE_OPENAI_ORGANIZATION,
-});
-
-const tools = Object.values(functions).map((x) => ({
-  type: "function",
-  function: x.spec,
-}));
+let engine;
+if (MODEL.startsWith("gemini-")) {
+  engine = Gemini(process.env.CODEYE_GEMINI_API_KEY, MODEL, functions);
+} else if (MODEL.startsWith("gpt-")) {
+  engine = OpenAI(
+    process.env.CODEYE_OPENAI_API_KEY,
+    process.env.CODEYE_OPENAI_ORGANIZATION,
+    MODEL,
+    functions,
+  );
+}
 
 async function respond(messages, text, a, b, callback, verbose = false) {
   messages.push({ role: "user", content: [{ type: "text", text }] });
 
   while (true) {
     while (
-      tokenize(messages) > OPENAI_TOKEN_LIMIT ||
+      tokenize(messages) > MODEL_TOKEN_LIMIT ||
       messages[1]?.role === "tool"
     ) {
       messages.splice(1, 1);
     }
 
-    const completion = await openai.chat.completions.create({
-      messages,
-      model: OPENAI_MODEL,
-      tools,
-    });
+    const completion = await engine.completion(messages);
 
     const message = completion.choices[0].message;
     messages.push(message);
@@ -139,6 +141,7 @@ async function generate(fresh = false, verbose = false) {
         "Current directory is: '" + cwd + "'.",
         "If working on an existing project, try determining the project type by listing and reading files in current directory.",
         "If unable to determine project type, ask the user explicitly.",
+        "Prefer using tool or function calling whenever possible.",
       ].join(" "),
     });
   }

@@ -9,7 +9,7 @@ async function impl({ path }) {
 }
 
 const spec = {
-  name: "create-directory",
+  name: "create_directory",
   description: "Creates a directory and its parents if they don't exist.",
   parameters: {
     type: "object",

@@ -22,7 +22,7 @@ async function impl({ path: dir }) {
 }
 
 const spec = {
-  name: "list-files-recursively",
+  name: "list_files_recursively",
   description: "List all files and directories in a directory recursively.",
   parameters: {
     type: "object",
