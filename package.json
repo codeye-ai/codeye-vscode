@@ -87,6 +87,7 @@
     }
   },
   "scripts": {
+    "debug": "node cli.js -rv",
     "esbuild-cli": "esbuild ./cli.js --bundle --outfile=cli.build.js --format=cjs --platform=node",
     "esbuild-extension": "esbuild ./extension.js --bundle --outfile=extension.build.js --external:vscode --format=cjs --platform=node",
     "lint": "eslint .",
