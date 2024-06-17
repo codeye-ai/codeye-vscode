@@ -43,5 +43,5 @@ npx vsce package
 To publish to [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=codeye.codeye), use below commands:
 
 ```shell
-npx vsce publish --baseImagesUrl=https://bitbucket.org/codeye-ai/codeye-assets/raw/main/
+npx vsce publish
 ```

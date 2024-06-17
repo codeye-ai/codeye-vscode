@@ -2,7 +2,7 @@
 
 [Visual Studio Code](https://code.visualstudio.com/) extension and CLI tool to read, fix, and write code as good as or even better than a human software engineer.
 
-![Screenshot](images/usage.png)
+![Screenshot](https://raw.githubusercontent.com/codeye-ai/codeye-assets/main/images/usage.png)
 
 ## Installation
 
@@ -20,13 +20,13 @@ There's two ways you can access the **Codeye** tool.
 
 One way is to start a Codeye session from the provided terminal profile.
 
-![Terminal Profile](images/terminal-profile.png)
+![Terminal Profile](https://raw.githubusercontent.com/codeye-ai/codeye-assets/main/images/terminal-profile.png)
 
 ### Command
 
 Or you could hit `CMD + SHIFT + P` and start a **Codeye** session from the **Command Palette**.
 
-![Command](images/command-palette.png)
+![Command](https://raw.githubusercontent.com/codeye-ai/codeye-assets/main/images/command-palette.png)
 
 ## Disclaimer
 
