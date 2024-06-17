@@ -17,8 +17,13 @@ async function save(cwd, messages) {
 }
 
 function toPath(cwd) {
+  const codeye = path.join(os.homedir(), ".codeye");
+  if (!fs.existsSync(codeye)) {
+    fs.mkdirSync(codeye, { recursive: true });
+  }
+
   const hash = crc32.str(cwd).toString(16);
-  return path.join(os.homedir(), `.codeye_${hash}.json`);
+  return path.join(codeye, `.history_${hash}.json`);
 }
 
 module.exports = {
