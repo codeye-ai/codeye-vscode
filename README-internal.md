@@ -37,7 +37,7 @@ npm install -g @vscode/vsce
 Then package your extension as `vsix` file.
 
 ```shell
-npx vsce package
+npx vsce package --allow-missing-repository --skip-license
 ```
 
 To publish to [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=codeye.codeye), use below commands:
