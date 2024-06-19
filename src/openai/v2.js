@@ -17,7 +17,7 @@ const tools = Object.values(functions).map((x) => ({
 
 async function init(wd, reset, prompt) {
   let assistant = await load("$codeye$", "assistant", "json");
-  if (!assistant) {
+  if (!assistant || reset) {
     assistant = await openai.beta.assistants.create({
       name: "Codeye",
       instructions: prompt,
