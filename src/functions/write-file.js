@@ -1,10 +1,10 @@
 const fs = require("fs/promises");
 const path = require("path");
 
-async function impl({ path: filepath, contents }) {
+async function impl({ path: filePath, contents }) {
   return fs
-    .mkdir(path.dirname(filepath), { recursive: true })
-    .then(() => fs.writeFile(filepath, contents, { encoding: "utf-8" }))
+    .mkdir(path.dirname(filePath), { recursive: true })
+    .then(() => fs.writeFile(filePath, contents, { encoding: "utf-8" }))
     .then(() => true)
     .catch(() => false)
     .then((success) => JSON.stringify({ success }));

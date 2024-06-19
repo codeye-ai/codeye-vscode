@@ -3,7 +3,7 @@ const getos = require("getos");
 const os = require("os");
 const repl = require("repl");
 
-const { init, respond } = require("./openai");
+const { init, respond } = require("./openai/v2");
 const { processes } = require("./functions/run-command");
 
 const wd = process.cwd();
@@ -29,7 +29,7 @@ async function main(reset = false, verbose = false) {
     };
   }
 
-  const messages = await init(
+  const state = await init(
     wd,
     reset,
     [
@@ -51,12 +51,11 @@ async function main(reset = false, verbose = false) {
   const prompt = "you → ";
   const r = repl.start({
     prompt: chalk.green(prompt),
-    eval: (a, b, c, d) =>
-      respond(wd, messages, (a || "").trim(), b, c, d, writer),
+    eval: (a, b, c, d) => respond(wd, state, (a || "").trim(), b, c, d, writer),
     useColors: true,
     writer: (output) => chalk.blue("codeye → ") + output + "\n",
   });
-  r.setPrompt(chalk.green(prompt), prompt.length);
+  r.setPrompt(chalk.green(prompt));
   r.on("exit", () => {
     Object.values(processes).forEach((process) => process.kill("SIGTERM"));
     process.exit();

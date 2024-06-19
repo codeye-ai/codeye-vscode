@@ -1,7 +1,7 @@
 const OpenAI = require("openai").default;
 
-const { load, save } = require("./features/history");
-const functions = require("./functions");
+const { load, save } = require("../utils/persistence");
+const functions = require("../functions");
 
 const openai = new OpenAI({
   apiKey: process.env.CODEYE_OPENAI_API_KEY,
@@ -19,7 +19,7 @@ const tools = Object.values(functions).map((x) => ({
 async function init(wd, reset, prompt) {
   const messages = [];
   if (!reset) {
-    const history = await load(wd);
+    const history = await load(wd, "history", "json");
     if (history) {
       messages.push(...history);
     }
@@ -56,7 +56,7 @@ async function respond(wd, messages, text, a, b, callback, writer = null) {
     messages.push(message);
 
     if (!message.tool_calls) {
-      await save(wd, messages);
+      await save(wd, messages, "history", "json");
       callback(null, message.content);
       break;
     }

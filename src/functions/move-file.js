@@ -3,7 +3,7 @@ const path = require("path");
 
 async function impl({ oldPath, newPath }) {
   return fs
-    .mkdir(path.dirname(destination), { recursive: true })
+    .mkdir(path.dirname(newPath), { recursive: true })
     .then(() => fs.rename(oldPath, newPath))
     .then(() => true)
     .catch(() => false)
