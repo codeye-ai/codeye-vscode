@@ -25,7 +25,7 @@ async function init(wd, reset, prompt) {
       model: OPENAI_MODEL,
     });
 
-    await save(wd, assistant.id, "assistant", "json");
+    await save("$codeye$", assistant.id, "assistant", "json");
   }
 
   let thread = await load(wd, "thread", "json");
