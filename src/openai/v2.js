@@ -25,17 +25,20 @@ async function init(wd, reset, prompt) {
       model: OPENAI_MODEL,
     });
 
-    await save(wd, assistant, "assistant", "json");
+    await save(wd, assistant.id, "assistant", "json");
   }
 
   let thread = await load(wd, "thread", "json");
   if (!thread || reset) {
     thread = await openai.beta.threads.create();
 
-    await save(wd, thread, "thread", "json");
+    await save(wd, thread.id, "thread", "json");
   }
 
-  return { assistant, thread };
+  return {
+    assistant: assistant.id,
+    thread: thread.id,
+  };
 }
 
 async function respond(
@@ -47,15 +50,15 @@ async function respond(
   callback,
   writer = null,
 ) {
-  await openai.beta.threads.messages.create(thread.id, {
+  await openai.beta.threads.messages.create(thread, {
     role: "user",
     content: text,
   });
 
   let run = await openai.beta.threads.runs.createAndPoll(
-    thread.id,
+    thread,
     {
-      assistant_id: assistant.id,
+      assistant_id: assistant,
     },
     {
       pollIntervalMs: 500,
@@ -64,7 +67,7 @@ async function respond(
 
   while (true) {
     if (run.status === "completed") {
-      const { data } = await openai.beta.threads.messages.list(thread.id, {
+      const { data } = await openai.beta.threads.messages.list(thread, {
         order: "desc",
       });
       const message = data[0];
@@ -96,7 +99,7 @@ async function respond(
     }
 
     run = await openai.beta.threads.runs.submitToolOutputsAndPoll(
-      thread.id,
+      thread,
       run.id,
       {
         tool_outputs: outputs,
