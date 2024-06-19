@@ -18,6 +18,6 @@ const argv = yargs(hideBin(process.argv))
   })
   .parse();
 
-const { generate } = require("./src/codeye");
+const { main } = require("./src/codeye");
 
-generate(!!argv.reset, !!argv.verbose);
+main(!!argv.reset, !!argv.verbose);
