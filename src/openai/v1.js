@@ -1,7 +1,7 @@
 const OpenAI = require("openai").default;
 
-const { load, save } = require("../utils/persistence");
 const functions = require("../functions");
+const { load, save } = require("../utils/persistence");
 
 const OPENAI_MODEL = process.env.CODEYE_OPENAI_MODEL || "gpt-4o";
 const OPENAI_TOKEN_LIMIT = (OPENAI_MODEL === "gpt-4o" ? 128 : 16) * 1000; // 128K is max on gpt-4o, 16K on gpt-3.5-turbo
@@ -16,7 +16,7 @@ const openai = new OpenAI({
   organization: process.env.CODEYE_OPENAI_ORGANIZATION,
 });
 
-async function init(wd, reset, prompt) {
+async function init(wd, reset, instructions) {
   const messages = [];
   if (!reset) {
     const history = await load(wd, "history", "json");
@@ -28,7 +28,7 @@ async function init(wd, reset, prompt) {
   if (!messages.length) {
     messages.push({
       role: "system",
-      content: prompt,
+      content: instructions,
     });
   }
 
@@ -36,12 +36,12 @@ async function init(wd, reset, prompt) {
 }
 
 async function respond(wd, messages, text, a, b, callback, writer = null) {
-  messages.push({ role: "user", content: [{ type: "text", text }] });
+  messages.push({ role: "user", content: text });
 
   while (true) {
     while (
       tokenize(messages) > OPENAI_TOKEN_LIMIT ||
-      (messages && messages[1].role === "tool")
+      (messages > 0 && messages[1].role !== "user")
     ) {
       messages.splice(1, 1);
     }
@@ -61,8 +61,8 @@ async function respond(wd, messages, text, a, b, callback, writer = null) {
       break;
     }
 
-    for (const call of message.tool_calls) {
-      const { name, arguments: argsStr } = call.function;
+    for (const tool of message.tool_calls) {
+      const { name, arguments: argsStr } = tool.function;
 
       const impl = functions[name]["impl"];
       const args = JSON.parse(argsStr);
@@ -76,36 +76,21 @@ async function respond(wd, messages, text, a, b, callback, writer = null) {
         );
       }
 
-      const response = await impl(args);
-
-      let content;
-      if (typeof response === "string") {
-        content = [{ type: "text", text: response }];
-      } else {
-        content = response;
-      }
+      const output = await impl(args);
 
       messages.push({
-        tool_call_id: call.id,
         role: "tool",
+        tool_call_id: tool.id,
         name: name,
-        content: content.filter((x) => x.type === "text"),
+        content: output,
       });
-
-      const images = content.filter((x) => x.type === "image_url");
-      if (images.length) {
-        messages.push({
-          role: "user",
-          content: images,
-        });
-      }
     }
   }
 }
 
 function tokenize(messages) {
   return messages.reduce(
-    (acc, message) => acc + (message.content ? message.content.length : 0),
+    (acc, message) => acc + (message.content?.length || 0),
     0,
   );
 }

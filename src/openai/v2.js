@@ -1,7 +1,7 @@
 const OpenAI = require("openai").default;
 
-const { load, save } = require("../utils/persistence");
 const functions = require("../functions");
+const { load, save } = require("../utils/persistence");
 
 const OPENAI_MODEL = process.env.CODEYE_OPENAI_MODEL || "gpt-4o";
 
@@ -15,29 +15,29 @@ const openai = new OpenAI({
   organization: process.env.CODEYE_OPENAI_ORGANIZATION,
 });
 
-async function init(wd, reset, prompt) {
-  let assistant = await load("$openai$", "assistant", "json");
-  if (!assistant || reset) {
-    assistant = await openai.beta.assistants.create({
+async function init(wd, reset, instructions) {
+  let assistantId = await load("$openai$", "assistant", "json");
+  if (!assistantId || reset) {
+    const assistant = await openai.beta.assistants.create({
       name: "Codeye",
-      instructions: prompt,
+      instructions,
       tools,
       model: OPENAI_MODEL,
     });
 
-    await save("$openai$", assistant.id, "assistant", "json");
+    await save("$openai$", (assistantId = assistant.id), "assistant", "json");
   }
 
-  let thread = await load(wd, "thread", "json");
-  if (!thread || reset) {
-    thread = await openai.beta.threads.create();
+  let threadId = await load(wd, "thread", "json");
+  if (!threadId || reset) {
+    const thread = await openai.beta.threads.create();
 
-    await save(wd, thread.id, "thread", "json");
+    await save(wd, (threadId = thread.id), "thread", "json");
   }
 
   return {
-    assistant: assistant.id,
-    thread: thread.id,
+    assistant: assistantId,
+    thread: threadId,
   };
 }
 
@@ -78,13 +78,13 @@ async function respond(
     const calls = run.required_action.submit_tool_outputs.tool_calls;
     const outputs = [];
 
-    for (const call of calls) {
-      const impl = functions[call.function.name]["impl"];
-      const args = JSON.parse(call.function.arguments);
+    for (const tool of calls) {
+      const impl = functions[tool.function.name]["impl"];
+      const args = JSON.parse(tool.function.arguments);
 
       if (writer) {
         writer(
-          call.function.name,
+          tool.function.name,
           JSON.stringify(
             !!args.contents ? { ...args, contents: "<redacted>" } : args,
           ),
@@ -93,7 +93,7 @@ async function respond(
 
       const output = await impl(args);
       outputs.push({
-        tool_call_id: call.id,
+        tool_call_id: tool.id,
         output,
       });
     }

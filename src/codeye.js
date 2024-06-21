@@ -3,7 +3,7 @@ const getos = require("getos");
 const os = require("os");
 const repl = require("repl");
 
-const { init, respond } = require("./gemini");
+const { init, respond } = require("./anthropic");
 const { processes } = require("./functions/run-command");
 
 const wd = process.cwd();

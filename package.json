@@ -1,11 +1,7 @@
 {
-  "name": "codeye",
-  "displayName": "Codeye",
-  "description": "Visual Studio Code extension and CLI tool to read, fix, and write code as good as or even better than a human software engineer.",
-  "icon": "icon.png",
-  "version": "0.1.6",
-  "engines": {
-    "vscode": "^1.80.0"
+  "activationEvents": [],
+  "bin": {
+    "codeye": "cli.build.js"
   },
   "categories": [
     "AI",
@@ -13,12 +9,6 @@
     "Machine Learning",
     "Snippets"
   ],
-  "publisher": "codeye",
-  "activationEvents": [],
-  "main": "extension.build.js",
-  "bin": {
-    "codeye": "cli.build.js"
-  },
   "contributes": {
     "commands": [
       {
@@ -31,24 +21,14 @@
       }
     ],
     "configuration": {
-      "title": "Codeye",
       "properties": {
         "codeye.openAiApiKey": {
-          "type": "string",
-          "description": "Your OpenAI API key."
-        },
-        "codeye.openAiOrganization": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "default": null,
-          "description": "Your OpenAI organization ID (if any)."
+          "description": "Your OpenAI API key.",
+          "type": "string"
         },
         "codeye.openAiModel": {
-          "type": [
-            "string"
-          ],
+          "default": "gpt-4o",
+          "description": "Model to use for code generation. Could be one of gpt-4o or gpt-3.5-turbo for now.",
           "enum": [
             "gpt-4o",
             "gpt-3.5-turbo"
@@ -61,10 +41,20 @@
             "GPT-4o",
             "GPT-3.5 Turbo"
           ],
-          "default": "gpt-4o",
-          "description": "Model to use for code generation. Could be one of gpt-4o or gpt-3.5-turbo for now."
+          "type": [
+            "string"
+          ]
+        },
+        "codeye.openAiOrganization": {
+          "default": null,
+          "description": "Your OpenAI organization ID (if any).",
+          "type": [
+            "string",
+            "null"
+          ]
         }
-      }
+      },
+      "title": "Codeye"
     },
     "menus": {
       "commandPalette": [
@@ -79,23 +69,15 @@
     "terminal": {
       "profiles": [
         {
-          "id": "codeye.terminalProfile",
           "icon": "terminal",
+          "id": "codeye.terminalProfile",
           "title": "Codeye"
         }
       ]
     }
   },
-  "scripts": {
-    "debug": "node cli.js -rv",
-    "esbuild-cli": "esbuild ./cli.js --bundle --outfile=cli.build.js --format=cjs --platform=node",
-    "esbuild-extension": "esbuild ./extension.js --bundle --outfile=extension.build.js --external:vscode --format=cjs --platform=node",
-    "lint": "eslint .",
-    "pretest": "yarn run lint",
-    "test": "vscode-test",
-    "vscode:prepublish": "npm run esbuild-cli -- --minify && npm run esbuild-extension -- --minify"
-  },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.24.0",
     "@google/generative-ai": "^0.13.0",
     "chalk": "4.1.2",
     "crc-32": "^1.2.2",
@@ -105,6 +87,7 @@
     "openai": "^4.47.2",
     "yargs": "^17.7.2"
   },
+  "description": "Visual Studio Code extension and CLI tool to read, fix, and write code as good as or even better than a human software engineer.",
   "devDependencies": {
     "@types/mocha": "^10.0.6",
     "@types/node": "18.x",
@@ -115,5 +98,23 @@
     "esbuild": "^0.21.4",
     "eslint": "^8.57.0",
     "typescript": "^5.4.5"
-  }
+  },
+  "displayName": "Codeye",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "icon": "icon.png",
+  "main": "extension.build.js",
+  "name": "codeye",
+  "publisher": "codeye",
+  "scripts": {
+    "debug": "node cli.js -rv",
+    "esbuild-cli": "esbuild ./cli.js --bundle --outfile=cli.build.js --format=cjs --platform=node",
+    "esbuild-extension": "esbuild ./extension.js --bundle --outfile=extension.build.js --external:vscode --format=cjs --platform=node",
+    "lint": "eslint .",
+    "pretest": "yarn run lint",
+    "test": "vscode-test",
+    "vscode:prepublish": "npm run esbuild-cli -- --minify && npm run esbuild-extension -- --minify"
+  },
+  "version": "0.1.6"
 }

@@ -1,7 +1,7 @@
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
-const { load, save } = require("../utils/persistence");
 const functions = require("../functions");
+const { load, save } = require("../utils/persistence");
 
 const GEMINI_MODEL = process.env.CODEYE_GEMINI_MODEL || "gemini-1.5-flash-001";
 
@@ -18,7 +18,7 @@ const model = gai.getGenerativeModel(
   { apiVersion: "v1beta" },
 );
 
-async function init(wd, reset, prompt) {
+async function init(wd, reset, instructions) {
   const messages = [];
   if (!reset) {
     const history = await load(wd, "history", "json");
@@ -31,7 +31,7 @@ async function init(wd, reset, prompt) {
     history: messages,
     systemInstruction: {
       role: "system",
-      parts: [{ text: prompt }],
+      parts: [{ text: instructions }],
     },
     tools,
   });
@@ -50,34 +50,34 @@ async function respond(
 ) {
   let { response } = await chat.sendMessage(text);
   while (true) {
-    const calls = response.functionCalls();
-    if (!calls?.length) {
+    const tools = response.functionCalls();
+    if (!tools?.length) {
       await save(wd, messages, "history", "json");
       callback(null, response.text()?.trim());
       return;
     }
 
     const responses = [];
-    for (const call of calls) {
-      const impl = functions[call.name]["impl"];
+    for (const tool of tools) {
+      const impl = functions[tool.name]["impl"];
 
       if (writer) {
         writer(
-          call.name,
+          tool.name,
           JSON.stringify(
-            !!call.args.contents
-              ? { ...call.args, contents: "<redacted>" }
-              : call.args,
+            !!tool.args.contents
+              ? { ...tool.args, contents: "<redacted>" }
+              : tool.args,
           ),
         );
       }
 
-      const output = await impl(call.args);
+      const output = await impl(tool.args);
       const reply = {
         functionResponse: {
-          name: call.name,
+          name: tool.name,
           response: {
-            name: call.name,
+            name: tool.name,
             content: output,
           },
         },
