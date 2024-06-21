@@ -14,7 +14,8 @@ Codeye is a revolutionary [Visual Studio Code](https://code.visualstudio.com/) e
 ## 🚀 Getting Started
 
 1. **Install Codeye**: Search for **Codeye** in the [Visual Studio Code](https://code.visualstudio.com/) **Extensions** tab or visit the [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=codeye.codeye) for quick installation.
-2. **Set Up OpenAI Credentials**: Navigate to `Settings` > `Extensions` > `Codeye` and enter your [OpenAI](https://openai.com/) credentials.
+2. **Select AI Model**: Navigate to `Settings` > `Extensions` > `Codeye` and choose you desired AI model.
+3. **Enter Credentials**: Enter your [Anthropic](https://www.anthropic.com), [Google AI Studio](https://ai.google.dev) or [OpenAI](https://openai.com/) credentials based on the selected model.
 
 ## 🛠️ How to Use
 

@@ -1,6 +1,6 @@
 # codeye-vscode
 
-[Visual Studio Code](https://code.visualstudio.com) extension and CLI tool to read, fix, and write code as good as or even better than a human software engineer.
+AI-powered SWE agent packaged as a [Visual Studio Code](https://code.visualstudio.com) extension to boost developer productivity by 10x.
 
 ## Install
 
