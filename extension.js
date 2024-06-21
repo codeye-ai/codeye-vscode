@@ -39,7 +39,7 @@ function create(args = []) {
     env: {
       ...process.env,
       CODEYE_AI_MODEL: codeye.get("aiModel"),
-      CODEYE_ANTHROPIC_API_KEY: codeye.get("anthpricApiKey"),
+      CODEYE_ANTHROPIC_API_KEY: codeye.get("anthropicApiKey"),
       CODEYE_GEMINI_API_KEY: codeye.get("geminiApiKey"),
       CODEYE_OPENAI_API_KEY: codeye.get("openAiApiKey"),
       CODEYE_OPENAI_ORGANIZATION: codeye.get("openAiOrganization"),

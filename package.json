@@ -50,17 +50,29 @@
             "string"
           ]
         },
-        "codeye.anthpricApiKey": {
+        "codeye.anthropicApiKey": {
+          "default": null,
           "description": "Your Anthropic API key.",
-          "type": "string"
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "codeye.geminiApiKey": {
+          "default": null,
           "description": "Your Gemini API key from Google AI Studio.",
-          "type": "string"
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "codeye.openAiApiKey": {
+          "default": null,
           "description": "Your OpenAI API key.",
-          "type": "string"
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "codeye.openAiOrganization": {
           "default": null,
