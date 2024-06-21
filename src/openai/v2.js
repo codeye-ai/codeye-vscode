@@ -3,11 +3,6 @@ const OpenAI = require("openai").default;
 const { load, save } = require("../utils/persistence");
 const functions = require("../functions");
 
-const openai = new OpenAI({
-  apiKey: process.env.CODEYE_OPENAI_API_KEY,
-  organization: process.env.CODEYE_OPENAI_ORGANIZATION,
-});
-
 const OPENAI_MODEL = process.env.CODEYE_OPENAI_MODEL || "gpt-4o";
 
 const tools = Object.values(functions).map((x) => ({
@@ -15,8 +10,13 @@ const tools = Object.values(functions).map((x) => ({
   function: x.spec,
 }));
 
+const openai = new OpenAI({
+  apiKey: process.env.CODEYE_OPENAI_API_KEY,
+  organization: process.env.CODEYE_OPENAI_ORGANIZATION,
+});
+
 async function init(wd, reset, prompt) {
-  let assistant = await load("$codeye$", "assistant", "json");
+  let assistant = await load("$openai$", "assistant", "json");
   if (!assistant || reset) {
     assistant = await openai.beta.assistants.create({
       name: "Codeye",
@@ -25,7 +25,7 @@ async function init(wd, reset, prompt) {
       model: OPENAI_MODEL,
     });
 
-    await save("$codeye$", assistant.id, "assistant", "json");
+    await save("$openai$", assistant.id, "assistant", "json");
   }
 
   let thread = await load(wd, "thread", "json");

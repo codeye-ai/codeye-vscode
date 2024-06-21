@@ -19,7 +19,7 @@ async function impl({ path: file }) {
 }
 
 const spec = {
-  name: "delete-file",
+  name: "delete_file",
   description: "Deletes a file from file system.",
   parameters: {
     type: "object",

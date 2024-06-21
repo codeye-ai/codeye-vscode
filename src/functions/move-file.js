@@ -11,7 +11,7 @@ async function impl({ oldPath, newPath }) {
 }
 
 const spec = {
-  name: "move-file",
+  name: "move_file",
   description: "Moves or rename a file from old path to new path",
   parameters: {
     type: "object",

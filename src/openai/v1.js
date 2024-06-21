@@ -3,11 +3,6 @@ const OpenAI = require("openai").default;
 const { load, save } = require("../utils/persistence");
 const functions = require("../functions");
 
-const openai = new OpenAI({
-  apiKey: process.env.CODEYE_OPENAI_API_KEY,
-  organization: process.env.CODEYE_OPENAI_ORGANIZATION,
-});
-
 const OPENAI_MODEL = process.env.CODEYE_OPENAI_MODEL || "gpt-4o";
 const OPENAI_TOKEN_LIMIT = (OPENAI_MODEL === "gpt-4o" ? 128 : 16) * 1000; // 128K is max on gpt-4o, 16K on gpt-3.5-turbo
 
@@ -15,6 +10,11 @@ const tools = Object.values(functions).map((x) => ({
   type: "function",
   function: x.spec,
 }));
+
+const openai = new OpenAI({
+  apiKey: process.env.CODEYE_OPENAI_API_KEY,
+  organization: process.env.CODEYE_OPENAI_ORGANIZATION,
+});
 
 async function init(wd, reset, prompt) {
   const messages = [];

@@ -31,7 +31,7 @@ async function impl({ path: dir }) {
 }
 
 const spec = {
-  name: "delete-directory",
+  name: "delete_directory",
   description: "Recursively deletes a directory and its contents.",
   parameters: {
     type: "object",

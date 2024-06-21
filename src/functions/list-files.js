@@ -14,7 +14,7 @@ async function impl({ path }) {
 }
 
 const spec = {
-  name: "list-files",
+  name: "list_files",
   description: "List all files and directories in a directory by its path.",
   parameters: {
     type: "object",

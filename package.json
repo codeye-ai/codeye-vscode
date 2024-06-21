@@ -96,6 +96,7 @@
     "vscode:prepublish": "npm run esbuild-cli -- --minify && npm run esbuild-extension -- --minify"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.13.0",
     "chalk": "4.1.2",
     "crc-32": "^1.2.2",
     "dotenv": "^16.4.5",

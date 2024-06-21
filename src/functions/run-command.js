@@ -18,7 +18,7 @@ async function impl({ command, background = false }) {
 }
 
 const spec = {
-  name: "run-command",
+  name: "run_command",
   description: "Runs a shell command in a child process and returns output.",
   parameters: {
     type: "object",
@@ -32,7 +32,6 @@ const spec = {
         type: "boolean",
         description:
           "Run the process in the background (for long running commands e.g., servers etc.) and return process ID.",
-        default: false,
       },
     },
     required: ["command"],

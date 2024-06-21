@@ -17,7 +17,7 @@ const impl = ({ path }) => {
 };
 
 const spec = {
-  name: "file-info",
+  name: "file_info",
   description: "Retrieves metadata about a file or directory.",
   parameters: {
     type: "object",

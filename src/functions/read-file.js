@@ -9,7 +9,7 @@ async function impl({ path }) {
 }
 
 const spec = {
-  name: "read-file",
+  name: "read_file",
   description: "Reads contents of a file as text and returns it as string.",
   parameters: {
     type: "object",

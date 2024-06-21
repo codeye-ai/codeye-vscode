@@ -4,7 +4,7 @@ async function impl({ name }) {
 }
 
 const spec = {
-  name: "get-env-var",
+  name: "get_env_var",
   description: "Gets the value of an environment variable by its name.",
   parameters: {
     type: "object",
