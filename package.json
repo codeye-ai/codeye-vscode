@@ -145,5 +145,5 @@
     "test": "vscode-test",
     "vscode:prepublish": "npm run esbuild-cli -- --minify && npm run esbuild-extension -- --minify"
   },
-  "version": "0.1.7"
+  "version": "0.1.8"
 }
