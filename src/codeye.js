@@ -3,7 +3,7 @@ const getos = require("getos");
 const os = require("os");
 const repl = require("repl");
 
-const { init, respond } = require("./anthropic");
+const engines = require("./engines");
 const { processes } = require("./functions/run-command");
 
 const wd = process.cwd();
@@ -28,6 +28,8 @@ async function main(reset = false, verbose = false) {
       arch: process.arch,
     };
   }
+
+  const { init, respond } = engines(process.env.CODEYE_AI_MODEL);
 
   const state = await init(
     wd,

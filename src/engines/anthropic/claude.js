@@ -1,10 +1,10 @@
 const { Anthropic } = require("@anthropic-ai/sdk");
 
-const functions = require("../functions");
-const { load, save } = require("../utils/persistence");
+const functions = require("../../functions");
+const { load, save } = require("../../utils/persistence");
 
 const ANTHROPIC_MODEL =
-  process.env.CODEYE_ANTHROPIC_MODEL || "claude-3-5-sonnet-20240620";
+  process.env.CODEYE_AI_MODEL || "claude-3-5-sonnet-20240620";
 const ANTHROPIC_TOKEN_LIMIT = 200 * 1000; // 200K is max on claude-*
 
 const anthropic = new Anthropic({

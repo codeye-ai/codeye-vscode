@@ -1,9 +1,9 @@
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
-const functions = require("../functions");
-const { load, save } = require("../utils/persistence");
+const functions = require("../../functions");
+const { load, save } = require("../../utils/persistence");
 
-const GEMINI_MODEL = process.env.CODEYE_GEMINI_MODEL || "gemini-1.5-flash-001";
+const GEMINI_MODEL = process.env.CODEYE_AI_MODEL || "google-1.5-flash-001";
 
 const gai = new GoogleGenerativeAI(process.env.CODEYE_GEMINI_API_KEY);
 

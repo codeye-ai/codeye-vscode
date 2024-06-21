@@ -22,28 +22,45 @@
     ],
     "configuration": {
       "properties": {
-        "codeye.openAiApiKey": {
-          "description": "Your OpenAI API key.",
-          "type": "string"
-        },
-        "codeye.openAiModel": {
+        "codeye.aiModel": {
           "default": "gpt-4o",
-          "description": "Model to use for code generation. Could be one of gpt-4o or gpt-3.5-turbo for now.",
+          "description": "AI/LLM model to use for code generation.",
           "enum": [
+            "claude-3-5-sonnet-20240620",
+            "gemini-1.5-flash-001",
+            "gemini-1.5-pro-001",
             "gpt-4o",
             "gpt-3.5-turbo"
           ],
           "enumDescriptions": [
-            "Use the (latest) GPT-4o model and works well with projects of all sizes.",
-            "Use the GPT-3.5 Turbo model which is cheaper but only suitable from small projects."
+            "Claude 3.5 Sonnet (by Anthropic) is performant, accurate and works well for projects of all sizes.",
+            "Gemini 1.5 Flash (by Google) is a faster model from the Gemini series.",
+            "Gemini 1.5 Pro (by Google) is an updated and capable model for projects of all sizes.",
+            "GPT-4o (by OpenAI) is fast and works well with projects of all sizes.",
+            "GPT-3.5 Turbo (by OpenAI) is cheaper but only suitable from small projects."
           ],
           "enumItemLabels": [
+            "Claude 3.5 Sonnet",
+            "Gemini 1.5 Flash",
+            "Gemini 1.5 Pro",
             "GPT-4o",
             "GPT-3.5 Turbo"
           ],
           "type": [
             "string"
           ]
+        },
+        "codeye.anthpricApiKey": {
+          "description": "Your Anthropic API key.",
+          "type": "string"
+        },
+        "codeye.geminiApiKey": {
+          "description": "Your Gemini API key from Google AI Studio.",
+          "type": "string"
+        },
+        "codeye.openAiApiKey": {
+          "description": "Your OpenAI API key.",
+          "type": "string"
         },
         "codeye.openAiOrganization": {
           "default": null,

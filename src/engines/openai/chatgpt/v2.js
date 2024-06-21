@@ -1,9 +1,9 @@
 const OpenAI = require("openai").default;
 
-const functions = require("../functions");
-const { load, save } = require("../utils/persistence");
+const functions = require("../../../functions");
+const { load, save } = require("../../../utils/persistence");
 
-const OPENAI_MODEL = process.env.CODEYE_OPENAI_MODEL || "gpt-4o";
+const OPENAI_MODEL = process.env.CODEYE_AI_MODEL || "gpt-4o";
 
 const tools = Object.values(functions).map((x) => ({
   type: "function",
