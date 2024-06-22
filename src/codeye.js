@@ -13,7 +13,9 @@ const wd = process.cwd();
 async function main(reset = false, verbose = false) {
   let auth;
   while (true) {
-    auth = await loader(chalk.cyan("loading…"), check);
+    auth = await loader(chalk.cyan("loading…"), () =>
+      check().catch(() => false),
+    );
     if (auth !== false) {
       break;
     }
@@ -24,7 +26,7 @@ async function main(reset = false, verbose = false) {
     );
 
     await ask(
-      `Please navigate to ${url} in a browser to login and press any key when done.`,
+      `Please login by visiting ${url} in a browser and PRESS ANY KEY when done.`,
     );
 
     auth = await loader(chalk.yellow("verifying…"), () =>
