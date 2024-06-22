@@ -1,3 +1,4 @@
+.env*
 .github/
 .vscode/**
 .vscode-test/**

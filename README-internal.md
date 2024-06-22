@@ -12,6 +12,11 @@ nvm install && nvm use
 
 # install node.js dependencies
 yarn install
+
+# create a .env file
+cp .env.dist .env
+
+# update values in .env
 ```
 
 ## Usage

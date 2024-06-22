@@ -21,7 +21,7 @@ const model = gai.getGenerativeModel(
 async function init(wd, reset, instructions) {
   const messages = [];
   if (!reset) {
-    const history = await load(wd, "history", "json");
+    const history = await load(wd, "gemini", "history");
     if (history) {
       messages.push(...history);
     }
@@ -52,7 +52,7 @@ async function respond(
   while (true) {
     const tools = response.functionCalls();
     if (!tools?.length) {
-      await save(wd, messages, "history", "json");
+      await save(wd, messages, "gemini", "history");
       callback(null, response.text()?.trim());
       return;
     }

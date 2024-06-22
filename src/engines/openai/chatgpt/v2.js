@@ -16,29 +16,25 @@ const openai = new OpenAI({
 });
 
 async function init(wd, reset, instructions) {
-  let assistantId = await load("$openai$", "assistant", "json");
-  if (!assistantId || reset) {
+  let state = await load(wd, "openai-v2", "state");
+  if (!state || reset) {
     const assistant = await openai.beta.assistants.create({
       name: "Codeye",
       instructions,
       tools,
       model: OPENAI_MODEL,
     });
-
-    await save("$openai$", (assistantId = assistant.id), "assistant", "json");
-  }
-
-  let threadId = await load(wd, "thread", "json");
-  if (!threadId || reset) {
     const thread = await openai.beta.threads.create();
 
-    await save(wd, (threadId = thread.id), "thread", "json");
+    state = {
+      assistant: assistant.id,
+      thread: thread.id,
+    };
+
+    await save(wd, state, "openai-v2", "state");
   }
 
-  return {
-    assistant: assistantId,
-    thread: threadId,
-  };
+  return state;
 }
 
 async function respond(

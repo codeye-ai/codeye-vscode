@@ -19,7 +19,7 @@ const openai = new OpenAI({
 async function init(wd, reset, instructions) {
   const messages = [];
   if (!reset) {
-    const history = await load(wd, "history", "json");
+    const history = await load(wd, "openai-v1", "history");
     if (history) {
       messages.push(...history);
     }
@@ -56,7 +56,7 @@ async function respond(wd, messages, text, a, b, callback, writer = null) {
     messages.push(message);
 
     if (!message.tool_calls) {
-      await save(wd, messages, "history", "json");
+      await save(wd, messages, "openai-v1", "history");
       callback(null, message.content);
       break;
     }

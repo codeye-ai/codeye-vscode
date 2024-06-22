@@ -5,10 +5,38 @@ const repl = require("repl");
 
 const engines = require("./engines");
 const { processes } = require("./functions/run-command");
+const { check, initiate, verify } = require("./utils/auth");
+const { ask, loader } = require("./utils/cli");
 
 const wd = process.cwd();
 
 async function main(reset = false, verbose = false) {
+  let auth;
+  while (true) {
+    auth = await loader(chalk.cyan("loading…"), check);
+    if (auth !== false) {
+      break;
+    }
+
+    const { token, url } = await loader(
+      chalk.yellow("starting login…"),
+      initiate,
+    );
+
+    await ask(
+      `Please navigate to ${url} in a browser to login and press any key when done.`,
+    );
+
+    auth = await loader(chalk.yellow("verifying…"), () =>
+      verify(token).catch(() => false),
+    );
+  }
+
+  if (auth === false) {
+    console.log(chalk.red("login failed"));
+    return;
+  }
+
   let system;
   if (os.platform() === "linux") {
     system = await new Promise((resolve, reject) => {
@@ -43,7 +71,8 @@ async function main(reset = false, verbose = false) {
       "Platform / operating system is: '" + JSON.stringify(system) + "'.",
       "Current directory is: '" + wd + "'.",
       "If working on an existing project, try determining the project type by listing and reading files in current directory.",
-      "If unable to determine project type, ask the user explicitly.",
+      "If unable to determine project type from files in current directory, ask the user explicitly.",
+      `Logged in user's email address is ${auth.email}.`,
     ].join(" "),
   );
   const writer = verbose

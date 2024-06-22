@@ -20,7 +20,7 @@ const tools = Object.values(functions).map((x) => ({
 async function init(wd, reset, instructions) {
   const messages = [];
   if (!reset) {
-    const history = await load(wd, "history", "json");
+    const history = await load(wd, "claude", "history");
     if (history) {
       messages.push(...history);
     }
@@ -60,7 +60,7 @@ async function respond(
     messages.push({ role, content });
 
     if (message.content.length === 1 && message.content[0].type === "text") {
-      await save(wd, messages, "history", "json");
+      await save(wd, messages, "claude", "history");
       callback(null, message.content[0].text);
       break;
     }

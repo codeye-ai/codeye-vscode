@@ -108,12 +108,14 @@
   "dependencies": {
     "@anthropic-ai/sdk": "^0.24.0",
     "@google/generative-ai": "^0.13.0",
+    "axios": "^1.7.2",
     "chalk": "4.1.2",
     "crc-32": "^1.2.2",
     "dotenv": "^16.4.5",
     "getos": "^3.2.1",
     "mime-types": "^2.1.35",
     "openai": "^4.47.2",
+    "ora": "^5.4",
     "yargs": "^17.7.2"
   },
   "description": "Visual Studio Code extension and CLI tool to read, fix, and write code as good as or even better than a human software engineer.",
@@ -137,13 +139,13 @@
   "name": "codeye",
   "publisher": "codeye",
   "scripts": {
+    "build": "npm run build:cli && npm run build:extension",
+    "build:cli": "esbuild ./cli.js --bundle --outfile=cli.build.js --format=cjs --platform=node --minify",
+    "build:extension": "esbuild ./extension.js --bundle --outfile=extension.build.js --external:vscode --format=cjs --platform=node --minify",
     "debug": "node cli.js -rv",
-    "esbuild-cli": "esbuild ./cli.js --bundle --outfile=cli.build.js --format=cjs --platform=node",
-    "esbuild-extension": "esbuild ./extension.js --bundle --outfile=extension.build.js --external:vscode --format=cjs --platform=node",
     "lint": "eslint .",
     "pretest": "yarn run lint",
-    "test": "vscode-test",
-    "vscode:prepublish": "npm run esbuild-cli -- --minify && npm run esbuild-extension -- --minify"
+    "test": "vscode-test"
   },
   "version": "0.1.8"
 }

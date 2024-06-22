@@ -3,8 +3,8 @@ const fs = require("fs");
 const os = require("os");
 const path = require("path");
 
-async function load(cwd, prefix, ext) {
-  const filePath = pathify(cwd, prefix, ext);
+async function load(cwd, name, ext) {
+  const filePath = pathify(cwd, name, ext);
   if (fs.existsSync(filePath)) {
     return JSON.parse(fs.readFileSync(filePath, "utf-8"));
   }
@@ -12,19 +12,23 @@ async function load(cwd, prefix, ext) {
   return null;
 }
 
-function pathify(cwd, prefix, ext) {
+function pathify(cwd, name, ext) {
   const codeye = path.join(os.homedir(), ".codeye");
   if (!fs.existsSync(codeye)) {
     fs.mkdirSync(codeye, { recursive: true });
   }
 
-  const hash = crc32.str(cwd).toString(16);
-  return path.join(codeye, `${prefix}_${hash}.${ext}`);
+  if (cwd) {
+    const hash = crc32.str(cwd).toString(16);
+    return path.join(codeye, `${name}_${hash}.${ext}`);
+  }
+
+  return path.join(codeye, `${name}.${ext}`);
 }
 
-async function save(cwd, data, prefix, ext) {
+async function save(cwd, data, name, ext) {
   fs.writeFileSync(
-    pathify(cwd, prefix, ext),
+    pathify(cwd, name, ext),
     JSON.stringify(data, null, 2),
     "utf-8",
   );
