@@ -34,6 +34,10 @@ function activate(context) {
 
 function create(args = []) {
   const codeye = vscode.workspace.getConfiguration("codeye");
+  const filePath = vscode.window.activeTextEditor?.document.uri.fsPath;
+  if (filePath) {
+    args.push("--file", filePath);
+  }
 
   return {
     env: {

@@ -6,6 +6,11 @@ require("dotenv").config({ path: path.join(__dirname, ".env") });
 const yargs = require("yargs/yargs");
 const { hideBin } = require("yargs/helpers");
 const argv = yargs(hideBin(process.argv))
+  .option("file", {
+    alias: "f",
+    type: "string",
+    description: "Path to current/active file (e.g., in the editor).",
+  })
   .option("reset", {
     alias: "r",
     type: "boolean",
@@ -20,4 +25,4 @@ const argv = yargs(hideBin(process.argv))
 
 const { main } = require("./src/codeye");
 
-main(!!argv.reset, !!argv.verbose);
+main(argv.file, !!argv.reset, !!argv.verbose);
