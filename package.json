@@ -147,5 +147,5 @@
     "pretest": "yarn run lint",
     "test": "vscode-test"
   },
-  "version": "0.1.10"
+  "version": "1.0.0"
 }
