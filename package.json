@@ -138,6 +138,10 @@
   "main": "extension.build.js",
   "name": "codeye",
   "publisher": "codeye",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codeye-ai/codeye-vscode"
+  },
   "scripts": {
     "build": "npm run build:cli && npm run build:extension",
     "build:cli": "esbuild ./cli.js --bundle --outfile=cli.build.js --format=cjs --platform=node --minify",
