@@ -10,7 +10,7 @@ const { ask, loader } = require("./utils/cli");
 
 const wd = process.cwd();
 
-async function main(file = null, reset = false, verbose = false) {
+async function run(file = null, reset = false, verbose = false) {
   let auth;
   while (true) {
     auth = await loader(chalk.cyan("loading…"), () =>
@@ -95,4 +95,4 @@ async function main(file = null, reset = false, verbose = false) {
   });
 }
 
-module.exports = { main };
+module.exports = { run };

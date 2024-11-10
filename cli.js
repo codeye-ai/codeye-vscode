@@ -23,6 +23,8 @@ const argv = yargs(hideBin(process.argv))
   })
   .parse();
 
-const { main } = require("./src/codeye");
+const { run } = require("./src/codeye");
 
-main(argv.file, !!argv.reset, !!argv.verbose);
+(async function main(params) {
+  await run(argv.file, !!argv.reset, !!argv.verbose);
+})()
