@@ -151,5 +151,5 @@
     "pretest": "yarn run lint",
     "test": "vscode-test"
   },
-  "version": "1.0.4"
+  "version": "1.0.5"
 }
