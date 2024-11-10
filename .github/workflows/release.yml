@@ -5,7 +5,20 @@ on:
     tags: ["*"]
 
 jobs:
-  publish:
+  cli:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          registry-url: https://registry.npmjs.org
+      - run: yarn install
+      - run: npm run build:cli -- --define:process.env.AUTH0_BASE_URL=\"${{ secrets.AUTH0_BASE_URL }}\" --define:process.env.AUTH0_CLIENT_ID=\"${{ secrets.AUTH0_CLIENT_ID }}\"
+      - run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+  extension:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

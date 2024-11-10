@@ -33,7 +33,6 @@ Start a Codeye session from the provided terminal profile.
 
 ![Terminal Profile](https://raw.githubusercontent.com/codeye-ai/codeye-vscode/main/images/terminal-profile.png)
 
-
 ## Install
 
 Clone the repository, navigate to project folder and run below commands:

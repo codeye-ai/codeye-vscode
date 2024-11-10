@@ -27,4 +27,4 @@ const { run } = require("./src/codeye");
 
 (async function main(params) {
   await run(argv.file, !!argv.reset, !!argv.verbose);
-})()
+})();

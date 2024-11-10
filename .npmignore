@@ -133,4 +133,4 @@ dist
 *.vsix
 
 # esbuild output
-/*.build.js
+/extension.build.js
