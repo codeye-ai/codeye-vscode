@@ -2,7 +2,7 @@
 
 Codeye is a revolutionary [Visual Studio Code](https://code.visualstudio.com/) extension and CLI that transforms your coding experience. Designed to boost developer productivity by 10x, Codeye can generate entire software projects, install developer tools, manage servers, and much more—all from simple text prompts.
 
-![Screenshot](images/usage.png)
+![Screenshot](https://raw.githubusercontent.com/codeye-ai/codeye-vscode/main/images/usage.png)
 
 ## Features
 
@@ -25,13 +25,13 @@ There are many ways you could launch **Codeye** once installed.
 
 Hit `CMD + SHIFT + P` and start a **Codeye** session from the **Command Palette**.
 
-![Command](images/command-palette.png)
+![Command](https://raw.githubusercontent.com/codeye-ai/codeye-vscode/main/images/command-palette.png)
 
 ### From Terminal
 
 Start a Codeye session from the provided terminal profile.
 
-![Terminal Profile](images/terminal-profile.png)
+![Terminal Profile](https://raw.githubusercontent.com/codeye-ai/codeye-vscode/main/images/terminal-profile.png)
 
 
 ## Install
