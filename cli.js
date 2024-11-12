@@ -28,7 +28,6 @@ const MODEL_NAMES = [
   "GPT-4o",
   "GPT-4o Mini",
   "O1 Preview",
-  ,
   "O1 Mini",
 ];
 
@@ -79,7 +78,9 @@ yargs(hideBin(process.argv))
       },
       {
         type: (prev, values) =>
-          values.model.indexOf("gpt") === 0 ? "text" : null,
+          values.model.indexOf("gpt") === 0 || values.model.indexOf("o1") === 0
+            ? "text"
+            : null,
         name: "organization",
         message: "OpenAI organization",
         initial: settings?.organization,
