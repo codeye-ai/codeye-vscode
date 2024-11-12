@@ -6,7 +6,7 @@
       "cwd": "${workspaceFolder}",
       "name": "CLI",
       "request": "launch",
-      "runtimeArgs": ["run", "debug", "--", "-rv"],
+      "runtimeArgs": ["run", "debug", "--", "chat", "-rv"],
       "runtimeExecutable": "npm",
       "type": "node"
     },

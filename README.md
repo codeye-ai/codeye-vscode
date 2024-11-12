@@ -68,7 +68,7 @@ To run as [Visual Studio Code](https://code.visualstudio.com) extension, open th
 Or use below command to run working copy of the tool:
 
 ```shell
-npm run debug
+npm run debug -- chat
 ```
 
 ## Publishing
