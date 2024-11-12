@@ -79,7 +79,7 @@ async function main(file = null, reset = false, verbose = false) {
     "To close, end or exit the tool session, users must explicitly type '.exit' and hit Enter.",
     `Logged in user's email address is ${auth.email}.`,
     "Platform / operating system is: '" + JSON.stringify(system) + "'.",
-    "Current directory is: '" + wd + "'.",
+    `Current directory is: '${wd}'.`,
   ];
   if (file) {
     instructions.push(`Current file is: '${file}'.`);
