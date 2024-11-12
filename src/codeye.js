@@ -6,11 +6,12 @@ const repl = require("repl");
 const engines = require("./engines");
 const { processes } = require("./functions/run-command");
 const { check, initiate, verify } = require("./utils/auth");
+const { load } = require("./utils/persistence");
 const { ask, loader } = require("./utils/cli");
 
 const wd = process.cwd();
 
-async function run(file = null, reset = false, verbose = false) {
+async function main(file = null, reset = false, verbose = false) {
   let auth;
   while (true) {
     auth = await loader(chalk.cyan("loading…"), () =>
@@ -59,7 +60,10 @@ async function run(file = null, reset = false, verbose = false) {
     };
   }
 
-  const { init, respond } = engines(process.env.CODEYE_AI_MODEL);
+  const settings = await load(null, "settings", "json");
+  const { init, respond } = engines(
+    process.env.CODEYE_AI_MODEL || settings?.model,
+  );
   const instructions = [
     "You are a code generation tool named Codeye, designed to write quality code/software.",
     "You can read and process any kind of text or image files for understanding the task.",
@@ -76,7 +80,7 @@ async function run(file = null, reset = false, verbose = false) {
     instructions.push(`Current file is: '${file}'.`);
   }
 
-  const state = await init(wd, reset, instructions.join(" "));
+  const state = await init(wd, reset, instructions.join(" "), settings);
   const writer = verbose
     ? (tool, args) => console.log(chalk.yellow(`tool → ${tool}`), args)
     : null;
@@ -95,4 +99,4 @@ async function run(file = null, reset = false, verbose = false) {
   });
 }
 
-module.exports = { run };
+module.exports = { main };

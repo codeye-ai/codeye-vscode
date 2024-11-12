@@ -9,8 +9,11 @@ module.exports = function (engine) {
     case "gemini-1.5-flash-001":
     case "gemini-1.5-pro-001":
       return gemini;
-    case "gpt-4o":
     case "gpt-3.5-turbo":
+    case "gpt-4o":
+    case "gpt-4o-mini":
+    case "o1-preview":
+    case "o1-mini":
     default:
       return chatgpt;
   }

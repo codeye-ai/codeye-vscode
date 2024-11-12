@@ -50,7 +50,7 @@ function create(args = []) {
     },
     name: "Codeye",
     shellPath: "node",
-    shellArgs: [script, ...args],
+    shellArgs: [script, "chat", ...args],
   };
 }
 

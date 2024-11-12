@@ -3,22 +3,13 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
 const functions = require("../../functions");
 const { load, save } = require("../../utils/persistence");
 
-const GEMINI_MODEL = process.env.CODEYE_AI_MODEL || "google-1.5-flash-001";
-
-const gai = new GoogleGenerativeAI(process.env.CODEYE_GEMINI_API_KEY);
-
 const tools = [
   {
     functionDeclarations: Object.values(functions).map((x) => x.spec),
   },
 ];
 
-const model = gai.getGenerativeModel(
-  { model: GEMINI_MODEL },
-  { apiVersion: "v1beta" },
-);
-
-async function init(wd, reset, instructions) {
+async function init(wd, reset, instructions, settings) {
   const messages = [];
   if (!reset) {
     const history = await load(wd, "gemini", "history");
@@ -26,6 +17,15 @@ async function init(wd, reset, instructions) {
       messages.push(...history);
     }
   }
+
+  const gai = new GoogleGenerativeAI(
+    process.env.CODEYE_GEMINI_API_KEY || settings?.apiKey,
+  );
+
+  const model = gai.getGenerativeModel(
+    { model: process.env.CODEYE_AI_MODEL || settings?.model },
+    { apiVersion: "v1beta" },
+  );
 
   const chat = model.startChat({
     history: messages,

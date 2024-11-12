@@ -3,26 +3,27 @@ const OpenAI = require("openai").default;
 const functions = require("../../../functions");
 const { load, save } = require("../../../utils/persistence");
 
-const OPENAI_MODEL = process.env.CODEYE_AI_MODEL || "gpt-4o";
-
 const tools = Object.values(functions).map((x) => ({
   type: "function",
   function: x.spec,
 }));
 
-const openai = new OpenAI({
-  apiKey: process.env.CODEYE_OPENAI_API_KEY,
-  organization: process.env.CODEYE_OPENAI_ORGANIZATION,
-});
+async function init(wd, reset, instructions, settings) {
+  const openai = new OpenAI({
+    apiKey: process.env.CODEYE_OPENAI_API_KEY || settings?.apiKey,
+    organization:
+      process.env.CODEYE_OPENAI_ORGANIZATION || settings?.organization,
+  });
 
-async function init(wd, reset, instructions) {
+  const model = process.env.CODEYE_AI_MODEL || settings?.model;
+
   let state = await load(wd, "openai-v2", "state");
   if (!state || reset) {
     const assistant = await openai.beta.assistants.create({
       name: "Codeye",
       instructions,
       tools,
-      model: OPENAI_MODEL,
+      model,
     });
     const thread = await openai.beta.threads.create();
 
@@ -34,12 +35,12 @@ async function init(wd, reset, instructions) {
     await save(wd, state, "openai-v2", "state");
   }
 
-  return state;
+  return { openai, ...state };
 }
 
 async function respond(
   wd,
-  { assistant, thread },
+  { openai, assistant, thread },
   text,
   a,
   b,

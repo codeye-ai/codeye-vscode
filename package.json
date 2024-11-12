@@ -29,22 +29,31 @@
             "claude-3-5-sonnet-20240620",
             "gemini-1.5-flash-001",
             "gemini-1.5-pro-001",
+            "gpt-3.5-turbo",
             "gpt-4o",
-            "gpt-3.5-turbo"
+            "gpt-4o-mini",
+            "o1-preview",
+            "o1-mini"
           ],
           "enumDescriptions": [
             "Claude 3.5 Sonnet (by Anthropic) is performant, accurate and works well for projects of all sizes.",
             "Gemini 1.5 Flash (by Google) is a faster model from the Gemini series.",
             "Gemini 1.5 Pro (by Google) is an updated and capable model for projects of all sizes.",
+            "GPT-3.5 Turbo (by OpenAI) is cheaper but only suitable from small projects.",
             "GPT-4o (by OpenAI) is fast and works well with projects of all sizes.",
-            "GPT-3.5 Turbo (by OpenAI) is cheaper but only suitable from small projects."
+            "GPT-4o Mini (by OpenAI) is faster and cheaper sibling og GPT-4o.",
+            "O1 Preview (by OpenAI) is better at mathematics and code generation.",
+            "O1 Mini (by OpenAI) is faster and cheaper sibling og O1 Preview."
           ],
           "enumItemLabels": [
             "Claude 3.5 Sonnet",
             "Gemini 1.5 Flash",
             "Gemini 1.5 Pro",
+            "GPT-3.5 Turbo",
             "GPT-4o",
-            "GPT-3.5 Turbo"
+            "GPT-4o Mini",
+            "O1 Preview",
+            "O1 Mini"
           ],
           "type": [
             "string"
@@ -116,6 +125,7 @@
     "mime-types": "^2.1.35",
     "openai": "^4.47.2",
     "ora": "^5.4",
+    "prompts": "^2.4.2",
     "yargs": "^17.7.2"
   },
   "description": "AI-powered SWE agent to help you quickly ship quality software, built right into Visual Studio Code.",
@@ -146,7 +156,7 @@
     "build": "npm run build:cli && npm run build:extension",
     "build:cli": "esbuild ./cli.js --bundle --outfile=cli.build.js --format=cjs --platform=node --minify",
     "build:extension": "esbuild ./extension.js --bundle --outfile=extension.build.js --external:vscode --format=cjs --platform=node --minify",
-    "debug": "node cli.js -rv",
+    "debug": "node cli.js",
     "lint": "eslint .",
     "pretest": "yarn run lint",
     "test": "vscode-test"

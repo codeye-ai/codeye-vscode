@@ -13,27 +13,38 @@ Codeye is a revolutionary [Visual Studio Code](https://code.visualstudio.com/) e
 
 ## Getting Started
 
-1. **Install Codeye**: Search for **Codeye** in the [Visual Studio Code](https://code.visualstudio.com/) **Extensions** tab or visit the [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=codeye.codeye) for quick installation.
-2. **Select AI Model**: Navigate to `Settings` > `Extensions` > `Codeye` and choose you desired AI model.
-3. **Enter Credentials**: Enter your [Anthropic](https://www.anthropic.com), [Google AI Studio](https://ai.google.dev) or [OpenAI](https://openai.com/) credentials based on the selected model.
-
 ## How to Use
 
 There are many ways you could launch **Codeye** once installed.
 
 ### From Command Palette
 
-Hit `CMD + SHIFT + P` and start a **Codeye** session from the **Command Palette**.
+1. **Install Codeye**: Search for **Codeye** in the [Visual Studio Code](https://code.visualstudio.com/) **Extensions** tab or visit the [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=codeye.codeye) for quick installation.
+2. **Select AI Model**: Navigate to `Settings` > `Extensions` > `Codeye` and choose you desired AI model.
+3. **Enter Credentials**: Enter your [Anthropic](https://www.anthropic.com), [Google AI Studio](https://ai.google.dev) or [OpenAI](https://openai.com/) credentials based on the selected model.
+4. Hit `CMD + SHIFT + P` and start a **Codeye** session from the **Command Palette**.
 
 ![Command](https://raw.githubusercontent.com/codeye-ai/codeye-vscode/main/images/command-palette.png)
 
 ### From Terminal
 
-Start a Codeye session from the provided terminal profile.
+Install and configure as global CLI command from [npm](https://www.npmjs.com/package/codeye):
 
-![Terminal Profile](https://raw.githubusercontent.com/codeye-ai/codeye-vscode/main/images/terminal-profile.png)
+```shell
+# install package as global
+npm i -g codeye
 
-## Install
+# configure model and credentials (only once)
+codeye configure
+```
+
+Then in any folder, start a session using below command:
+
+```shell
+codeye chat
+```
+
+## Development
 
 Clone the repository, navigate to project folder and run below commands:
 
@@ -50,15 +61,15 @@ cp .env.dist .env
 # update values in .env
 ```
 
-Use below command to run working copy of the tool:
+To run as [Visual Studio Code](https://code.visualstudio.com) extension, open the project is [Visual Studio Code](https://code.visualstudio.com) and hit `F5` to start a new [Visual Studio Code](https://code.visualstudio.com) window with this extension preloaded.
+
+![Terminal Profile](https://raw.githubusercontent.com/codeye-ai/codeye-vscode/main/images/terminal-profile.png)
+
+Or use below command to run working copy of the tool:
 
 ```shell
 npm run debug
 ```
-
-## Usage
-
-To run as [Visual Studio Code](https://code.visualstudio.com) extension, open the project is [Visual Studio Code](https://code.visualstudio.com) and hit `F5` to start a new [Visual Studio Code](https://code.visualstudio.com) window with this extension preloaded.
 
 ## Publishing
 

@@ -3,13 +3,7 @@ const { Anthropic } = require("@anthropic-ai/sdk");
 const functions = require("../../functions");
 const { load, save } = require("../../utils/persistence");
 
-const ANTHROPIC_MODEL =
-  process.env.CODEYE_AI_MODEL || "claude-3-5-sonnet-20240620";
 const ANTHROPIC_TOKEN_LIMIT = 200 * 1000; // 200K is max on claude-*
-
-const anthropic = new Anthropic({
-  apiKey: process.env.CODEYE_ANTHROPIC_API_KEY,
-});
 
 const tools = Object.values(functions).map((x) => ({
   name: x.spec.name,
@@ -17,7 +11,7 @@ const tools = Object.values(functions).map((x) => ({
   input_schema: x.spec.parameters,
 }));
 
-async function init(wd, reset, instructions) {
+async function init(wd, reset, instructions, settings) {
   const messages = [];
   if (!reset) {
     const history = await load(wd, "claude", "history");
@@ -26,12 +20,21 @@ async function init(wd, reset, instructions) {
     }
   }
 
-  return { messages, instructions };
+  const anthropic = new Anthropic({
+    apiKey: process.env.CODEYE_ANTHROPIC_API_KEY || settings?.apiKey,
+  });
+
+  return {
+    anthropic,
+    messages,
+    model: process.env.CODEYE_AI_MODEL || settings?.model,
+    instructions,
+  };
 }
 
 async function respond(
   wd,
-  { messages, instructions },
+  { anthropic, messages, model, instructions },
   text,
   a,
   b,
@@ -49,7 +52,7 @@ async function respond(
     }
 
     const message = await anthropic.messages.create({
-      model: ANTHROPIC_MODEL,
+      model,
       max_tokens: 4096,
       messages,
       system: instructions,

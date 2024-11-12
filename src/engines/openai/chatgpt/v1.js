@@ -3,20 +3,12 @@ const OpenAI = require("openai").default;
 const functions = require("../../../functions");
 const { load, save } = require("../../../utils/persistence");
 
-const OPENAI_MODEL = process.env.CODEYE_AI_MODEL || "gpt-4o";
-const OPENAI_TOKEN_LIMIT = (OPENAI_MODEL === "gpt-4o" ? 128 : 16) * 1000; // 128K is max on gpt-4o, 16K on gpt-3.5-turbo
-
 const tools = Object.values(functions).map((x) => ({
   type: "function",
   function: x.spec,
 }));
 
-const openai = new OpenAI({
-  apiKey: process.env.CODEYE_OPENAI_API_KEY,
-  organization: process.env.CODEYE_OPENAI_ORGANIZATION,
-});
-
-async function init(wd, reset, instructions) {
+async function init(wd, reset, instructions, settings) {
   const messages = [];
   if (!reset) {
     const history = await load(wd, "openai-v1", "history");
@@ -32,15 +24,32 @@ async function init(wd, reset, instructions) {
     });
   }
 
-  return messages;
+  const openai = new OpenAI({
+    apiKey: process.env.CODEYE_OPENAI_API_KEY || settings?.apiKey,
+    organization:
+      process.env.CODEYE_OPENAI_ORGANIZATION || settings?.organization,
+  });
+
+  const model = process.env.CODEYE_AI_MODEL || settings?.model;
+  const tokenLimit = (model === "gpt-3.5-turbo" ? 16 : 128) * 1000; // 128K is max on gpt-4o*, 16K on gpt-3.5-turbo
+
+  return { messages, model, openai, tokenLimit };
 }
 
-async function respond(wd, messages, text, a, b, callback, writer = null) {
+async function respond(
+  wd,
+  { messages, model, openai, tokenLimit },
+  text,
+  a,
+  b,
+  callback,
+  writer = null,
+) {
   messages.push({ role: "user", content: text });
 
   while (true) {
     while (
-      tokenize(messages) > OPENAI_TOKEN_LIMIT ||
+      tokenize(messages) > tokenLimit ||
       (messages > 0 && messages[1].role !== "user")
     ) {
       messages.splice(1, 1);
@@ -48,7 +57,7 @@ async function respond(wd, messages, text, a, b, callback, writer = null) {
 
     const completion = await openai.chat.completions.create({
       messages,
-      model: OPENAI_MODEL,
+      model,
       tools,
     });
 
